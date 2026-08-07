@@ -1,0 +1,346 @@
+﻿@model TradeSim.Models.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["PageTitle"] = "Dashboard";
+    ViewData["PageSubtitle"] = "Welcome back, " + User.Identity?.Name + " 👋";
+}
+
+<div class="dashboard-container">
+
+  
+    <!-- KPI Cards -->
+
+    <section class="kpi-row">
+
+        <!-- Virtual Balance -->
+        <div class="kpi-card">
+
+            <div class="kpi-header">
+
+                <div class="kpi-icon purple">
+                    <i class="bi bi-wallet2"></i>
+                </div>
+
+                <div class="kpi-content">
+
+                    <div class="kpi-title">
+                        Virtual Balance
+                    </div>
+
+                    <div class="kpi-value">
+                        ₹@Model.VirtualBalance.ToString("N0")
+                    </div>
+
+                    <div class="kpi-footer">
+                        Available to trade
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Portfolio Value -->
+        <div class="kpi-card">
+
+            <div class="kpi-header">
+
+                <div class="kpi-icon blue">
+                    <i class="bi bi-briefcase"></i>
+                </div>
+
+                <div class="kpi-content">
+
+                    <div class="kpi-title">
+                        Portfolio Value
+                    </div>
+
+                    <div class="kpi-value">
+                        ₹@Model.PortfolioValue.ToString("N0")
+                    </div>
+
+                    <div class="kpi-footer positive">
+                        +@Model.PortfolioGrowthPercent%
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Total P/L -->
+        <div class="kpi-card">
+
+            <div class="kpi-header">
+
+                <div class="kpi-icon green">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+
+                <div class="kpi-content">
+
+                    <div class="kpi-title">
+                        Total P/L
+                    </div>
+
+                    <div class="kpi-value @(Model.TotalPnL >= 0 ? "positive" : "negative")">
+                        @(Model.TotalPnL >= 0 ? "+" : "")₹@Model.TotalPnL.ToString("N0")
+                    </div>
+
+                    <div class="kpi-footer @(Model.TotalPnL >= 0 ? "positive" : "negative")">
+                        @Model.PortfolioGrowthPercent%
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Today's P/L -->
+        <div class="kpi-card">
+
+            <div class="kpi-header">
+
+                <div class="kpi-icon orange">
+                    <i class="bi bi-lightning-charge"></i>
+                </div>
+
+                <div class="kpi-content">
+
+                    <div class="kpi-title">
+                        Today's P/L
+                    </div>
+
+                    <div class="kpi-value @(Model.TodayPnL >= 0 ? "positive" : "negative")">
+                        @(Model.TodayPnL >= 0 ? "+" : "")₹@Model.TodayPnL.ToString("N0")
+                    </div>
+
+                    <div class="kpi-footer @(Model.TodayPnL >= 0 ? "positive" : "negative")">
+                        @Model.TodayGrowthPercent%
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Portfolio Performance + Quick Actions -->
+    <section class="analytics-row">
+
+        <div class="performance-card">
+
+            <div class="performance-header">
+
+                <div>
+
+                    <h3>Portfolio Performance</h3>
+
+                    <div class="performance-value">
+
+                        +7.54%
+
+                        <span>All Time</span>
+
+                    </div>
+
+                </div>
+
+                <div class="chart-filter">
+
+                    <button>1D</button>
+                    <button>1W</button>
+                    <button class="active">1M</button>
+                    <button>3M</button>
+                    <button>1Y</button>
+                    <button>All</button>
+
+                </div>
+
+            </div>
+
+            <div class="chart-area">
+
+                <svg viewBox="0 0 800 250">
+
+                    <polyline fill="none"
+                              stroke="#6D5DF6"
+                              stroke-width="4"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              points="
+                    20,210
+                    70,180
+                    120,190
+                    170,160
+                    220,145
+                    270,120
+                    320,135
+                    370,100
+                    420,110
+                    470,90
+                    520,115
+                    570,80
+                    620,95
+                    670,60
+                    720,65
+                    780,35" />
+
+                </svg>
+
+            </div>
+
+        </div>
+
+        <div class="actions-card">
+
+            <h3>Quick Actions</h3>
+
+            <div class="action-card buy">
+                <div>
+                    <strong>Buy Stock</strong>
+                    <p>Place a new paper trade</p>
+                </div>
+                <i class="bi bi-arrow-right"></i>
+            </div>
+
+            <div class="action-card sell">
+                <div>
+                    <strong>Sell Stock</strong>
+                    <p>Exit an existing position</p>
+                </div>
+                <i class="bi bi-arrow-right"></i>
+            </div>
+
+            <div class="action-card portfolio">
+                <div>
+                    <strong>View Portfolio</strong>
+                    <p>Check your holdings</p>
+                </div>
+                <i class="bi bi-arrow-right"></i>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Bottom Section -->
+    <section class="bottom-row">
+
+        <!-- Top Gainers -->
+        <div class="stock-card">
+
+            <div class="card-header">
+
+                <h3>Top Gainers</h3>
+
+                <a href="#">View All</a>
+
+            </div>
+
+            <div class="stock-list">
+
+                @foreach (var stock in Model.TopGainers)
+                {
+                    <div class="stock-item">
+
+                        <div class="stock-left">
+                            <strong>@stock.Symbol</strong>
+                            <small>₹@stock.Price.ToString("N0")</small>
+                        </div>
+
+                        <div class="stock-right positive">
+                            <i class="bi bi-caret-up-fill"></i>
+                            <span>+@stock.ChangePercent%</span>
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+        <!-- Top Losers -->
+
+        <div class="stock-card">
+
+            <div class="card-header">
+
+                <h3>Top Losers</h3>
+
+                <a href="#">View All</a>
+
+            </div>
+
+            <div class="stock-list">
+
+                @foreach (var stock in Model.TopLosers)
+                {
+                    <div class="stock-item">
+
+                        <div class="stock-left">
+                            <strong>@stock.Symbol</strong>
+                            <small>₹@stock.Price.ToString("N0")</small>
+                        </div>
+
+                        <div class="stock-right negative">
+                            <i class="bi bi-caret-down-fill"></i>
+                            <span>@stock.ChangePercent%</span>
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+        <!-- Market Indices -->
+
+        <div class="indices-card">
+
+            <div class="card-header">
+
+                <h3>Market Indices</h3>
+
+            </div>
+
+            <div class="stock-list">
+
+                @foreach (var index in Model.MarketIndices)
+                {
+                    <div class="stock-item">
+
+                        <div class="stock-left">
+                            <strong>@index.Name</strong>
+                            <small>@index.Value.ToString("N0")</small>
+                        </div>
+
+                        <div class="stock-right @(index.ChangePercent >= 0 ? "positive" : "negative")">
+
+                            <i class="bi @(index.ChangePercent >= 0 ? "bi-caret-up-fill" : "bi-caret-down-fill")"></i>
+
+                            <span>
+                                @(index.ChangePercent >= 0 ? "+" : "")
+                                @index.ChangePercent%
+                            </span>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>

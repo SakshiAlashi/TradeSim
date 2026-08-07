@@ -1,0 +1,210 @@
+﻿@{
+    var fullName = User.Identity?.Name;
+    var userName = User.FindFirst("UserName")?.Value;
+
+    var initials = "";
+
+    if (!string.IsNullOrWhiteSpace(fullName))
+    {
+        var parts = fullName.Split(' ');
+
+        if (parts.Length >= 2)
+        {
+            initials = $"{parts[0][0]}{parts[1][0]}";
+        }
+        else
+        {
+            initials = $"{parts[0][0]}";
+        }
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TradeSim</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/watchlist.css" />
+    <link rel="stylesheet" href="~/TradeSim.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/layout/layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/layout/topbar.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/layout/sidebar.css" asp-append-version="true" />
+
+    <link rel="stylesheet" href="~/css/pages/dashboard.css" asp-append-version="true" />
+</head>
+<body>
+
+    <div class="app-layout">
+
+        <aside class="sidebar" id="sidebar">
+
+            <div class="brand" id="sidebarToggle">
+
+                <div class="brand-logo">
+                    📈
+                </div>
+
+                <div class="brand-text">
+
+                    <h2>TradeSim</h2>
+
+                    <span>Paper Trading Platform</span>
+
+                </div>
+
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <a asp-controller="Dashboard"
+                   asp-action="Dashboard"
+                   data-title="Dashboard">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a asp-controller="Watchlist"
+                   asp-action="Index"
+                   data-title="Watchlist">
+
+                    <i class="bi bi-list-stars"></i>
+
+                    <span>Watchlist</span>
+
+                </a>
+
+                <a href="#">
+                    <i class="bi bi-wallet2"></i>
+                    <span>Portfolio</span>
+                </a>
+
+                <a href="#">
+                    <i class="bi bi-receipt"></i>
+                    <span>Orders</span>
+                </a>
+
+                <a href="#">
+                    <i class="bi bi-bookmark-star"></i>
+                    <span>Watchlist</span>
+                </a>
+
+                <a href="#">
+                    <i class="bi bi-trophy"></i>
+                    <span>Leaderboard</span>
+                </a>
+
+            </nav>
+
+        </aside>
+
+        <div class="main-content" id="mainContent">
+            <header class="topbar">
+
+                <div class="topbar-left">
+                    <div>
+
+                        <h2 class="page-title">
+                            @ViewData["PageTitle"]
+                        </h2>
+
+                        <p class="page-subtitle">
+                            @ViewData["PageSubtitle"]
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="topbar-search">
+
+                    <i class="bi bi-search"></i>
+
+                    <input type="text"
+                           placeholder="Search Stocks..." />
+
+                </div>
+
+                <div class="topbar-right">
+
+                    <div class="notification-btn">
+                        <i class="bi bi-bell"></i>
+                    </div>
+
+                    <div class="profile-dropdown">
+
+                        <div class="profile-trigger">
+
+                            <div class="avatar">
+                                @initials
+                            </div>
+
+                            <i class="bi bi-chevron-down"></i>
+
+                        </div>
+
+                        <div class="profile-menu">
+
+                            <div class="profile-header">
+                                <strong>@fullName</strong>
+                            </div>
+
+                            <a href="#">
+                                <i class="bi bi-person"></i>
+                                My Profile
+                            </a>
+
+                            <a href="#">
+                                <i class="bi bi-gear"></i>
+                                Settings
+                            </a>
+
+                            <hr />
+
+                            <form asp-controller="Account"
+                                  asp-action="Logout"
+                                  method="post">
+
+                                <button type="submit"
+                                        class="logout-btn">
+
+                                    <i class="bi bi-box-arrow-right"></i>
+
+                                    Logout
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+            <main>
+
+                @RenderBody()
+
+            </main>
+
+        </div>
+
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+
+    <script src="~/js/layout/topbar.js" asp-append-version="true"></script>
+    <script src="~/js/layout/sidebar.js" asp-append-version="true"></script>
+</body>
+</html>

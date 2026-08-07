@@ -1,0 +1,157 @@
+/* ==========================================================
+   SIDEBAR
+========================================================== */
+.sidebar {
+    width: 250px;
+    min-width: 250px;
+    height: 100vh;
+    background: #0F172A;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: width .25s ease, min-width .25s ease;
+}
+
+    /* Collapsed */
+
+    .sidebar.collapsed {
+        width: 72px;
+        min-width: 72px;
+    }
+
+/* ==========================================================
+   BRAND
+========================================================== */
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 22px 18px;
+    cursor: pointer;
+    user-select: none;
+    transition: .25s;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+    .brand:hover {
+        background: rgba(255,255,255,.04);
+    }
+
+.brand-text {
+    overflow: hidden;
+    white-space: nowrap;
+    transition: opacity .2s, width .25s;
+}
+
+    .brand-text h2 {
+        margin: 0;
+        font-size: 21px;
+        font-weight: 700;
+    }
+
+    .brand-text span {
+        font-size: 12px;
+        color: #94A3B8;
+    }
+
+/* Hide Brand Text */
+
+.sidebar.collapsed .brand-text {
+    width: 0;
+    opacity: 0;
+}
+.sidebar.collapsed .brand{
+    justify-content:center;
+    padding:20px 0;
+}
+
+/* ==========================================================
+   NAVIGATION
+========================================================== */
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 12px;
+    gap: 6px;
+    flex: 1;
+}
+
+    .sidebar-nav a {
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 0 14px;
+        color: #CBD5E1;
+        text-decoration: none;
+        transition: .2s;
+        white-space: nowrap;
+        position: relative;
+    }
+
+        .sidebar-nav a:hover {
+            background: rgba(37,99,235,.12);
+            color: #fff;
+        }
+
+        .sidebar-nav a.active {
+            background: #2563EB;
+            color: #fff;
+        }
+
+    .sidebar-nav i {
+        font-size: 19px;
+        min-width: 22px;
+        text-align: center;
+    }
+
+    .sidebar-nav span {
+        transition: .25s;
+    }
+
+/* Hide Menu Text */
+
+    .sidebar-nav span {
+        transition: opacity .2s ease;
+    }
+
+.sidebar.collapsed .sidebar-nav span {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+/* Center Icons */
+
+.sidebar.collapsed .sidebar-nav a {
+    justify-content: center;
+    padding: 0;
+    gap: 0;
+}
+
+/* ==========================================================
+   TOOLTIP
+========================================================== */
+
+.sidebar-nav a::after {
+    content: attr(data-title);
+    position: absolute;
+    left: 78px;
+    background: #111827;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: .2s;
+}
+
+.sidebar.collapsed .sidebar-nav a:hover::after {
+    opacity: 1;
+}

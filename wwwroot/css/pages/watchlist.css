@@ -1,0 +1,287 @@
+﻿/* ==========================================================
+   WATCHLIST PAGE
+========================================================== */
+
+.watchlist-page {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    padding: 24px;
+    background: #f8fafc;
+}
+
+/* ==========================================================
+   HEADER
+========================================================== */
+
+.watchlist-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.add-symbol-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 42px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 10px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .2s;
+}
+
+    .add-symbol-btn:hover {
+        background: #1d4ed8;
+    }
+
+/* ==========================================================
+   TABS
+========================================================== */
+
+.watchlist-tabs {
+    display: flex;
+    gap: 28px;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 6px;
+}
+
+    .watchlist-tabs button {
+        background: none;
+        border: none;
+        padding: 14px 0;
+        cursor: pointer;
+        color: #64748b;
+        font-size: 14px;
+        font-weight: 600;
+        position: relative;
+        transition: .2s;
+    }
+
+        .watchlist-tabs button:hover {
+            color: #2563eb;
+        }
+
+        .watchlist-tabs button.active {
+            color: #2563eb;
+        }
+
+            .watchlist-tabs button.active::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                bottom: -1px;
+                width: 100%;
+                height: 2px;
+                background: #2563eb;
+            }
+
+/* ==========================================================
+   WATCHLIST
+========================================================== */
+
+.watchlist-list {
+    flex: 1;
+    overflow-y: auto;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+    .watchlist-list::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .watchlist-list::-webkit-scrollbar-thumb {
+        background: #d1d5db;
+        border-radius: 20px;
+    }
+
+/* ==========================================================
+   ROW
+========================================================== */
+
+.watchlist-row {
+    display: grid;
+    grid-template-columns: 1.8fr 120px 90px;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid #edf2f7;
+    transition: all .18s ease;
+    cursor: pointer;
+}
+
+    .watchlist-row:last-child {
+        border-bottom: none;
+    }
+
+    .watchlist-row:hover {
+        background: #f1f5f9;
+    }
+
+    .watchlist-row.active {
+        background: #eef4ff;
+        border-left: 3px solid #2563eb;
+    }
+
+/* ==========================================================
+   SYMBOL
+========================================================== */
+
+.symbol {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: .4px;
+    color: #111827;
+}
+
+/* ==========================================================
+   PRICE
+========================================================== */
+
+.price {
+    text-align: right;
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* ==========================================================
+   CHANGE
+========================================================== */
+
+.change {
+    text-align: right;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ==========================================================
+   STATUS
+========================================================== */
+
+.positive {
+    color: #16a34a;
+}
+
+.negative {
+    color: #dc2626;
+}
+
+/* ==========================================================
+   EMPTY STATE
+========================================================== */
+
+.empty-watchlist {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    color: #94a3b8;
+    gap: 10px;
+}
+
+    .empty-watchlist i {
+        font-size: 48px;
+    }
+
+    .empty-watchlist h3 {
+        margin: 0;
+        color: #475569;
+    }
+
+    .empty-watchlist p {
+        margin: 0;
+    }
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media (max-width: 768px) {
+
+    .watchlist-page {
+        padding: 16px;
+    }
+
+    .watchlist-row {
+        grid-template-columns: 1fr auto;
+        row-gap: 6px;
+    }
+
+    .price {
+        text-align: right;
+    }
+
+    .change {
+        grid-column: 2;
+        text-align: right;
+    }
+
+    .watchlist-tabs {
+        gap: 18px;
+        overflow-x: auto;
+    }
+
+        .watchlist-tabs::-webkit-scrollbar {
+            display: none;
+        }
+}
+.favorite-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #cbd5e1;
+    border-radius: 50%;
+    transition: .2s;
+}
+
+    .favorite-btn:hover {
+        background: #f8fafc;
+        color: #f59e0b;
+        transform: scale(1.15);
+    }
+
+    .favorite-btn.active {
+        color: #f59e0b;
+    }
+
+.bi-star-fill{
+
+    color:#f59e0b;
+}
+.symbol {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.price {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.change {
+    font-size: 14px;
+    font-weight: 600;
+}
+.symbol-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

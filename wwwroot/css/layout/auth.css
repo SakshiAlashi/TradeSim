@@ -1,0 +1,20 @@
+﻿body.auth-body {
+    margin: 0;
+    background: #f5f7fb;
+    font-family: Segoe UI,sans-serif;
+}
+
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-card {
+    width: 450px;
+    background: white;
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 15px 40px rgba(0,0,0,.08);
+}

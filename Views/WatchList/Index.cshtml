@@ -1,0 +1,68 @@
+﻿@model TradeSim.ViewModels.WatchlistViewModel
+
+@{
+    ViewData["Title"] = "Watchlist";
+    ViewData["PageTitle"] = "Watchlist";
+    ViewData["PageSubtitle"] = "Track your favourite stocks";
+}
+
+<div class="watchlist-page">
+    <!-- Tabs -->
+
+    <div class="watchlist-toolbar">
+
+        <div class="watchlist-tabs">
+
+            <button class="active">My Watchlist</button>
+            <button>Indices</button>
+            <button>Favorites</button>
+
+        </div>
+
+        <button class="add-symbol-btn">
+            <i class="bi bi-plus"></i>
+            Add Stock
+        </button>
+
+    </div>
+
+    <!-- List -->
+    <div class="watchlist-list">
+
+        @foreach (var stock in Model.Stocks)
+        {
+            <a asp-controller="Stock"
+               asp-action="Details"
+               asp-route-symbol="@stock.Symbol"
+               class="watchlist-row">
+
+                <div class="symbol-section">
+
+                    <button class="favorite-btn">
+                        <i class="bi bi-star"></i>
+                    </button>
+
+                    <span class="symbol">
+                        @stock.Symbol
+                    </span>
+
+                </div>
+
+                <span class="price">
+                    ₹@stock.LastPrice.ToString("N2")
+                </span>
+
+                <span class="change @(stock.Change >= 0 ? "positive" : "negative")">
+
+                    @(stock.Change >= 0 ? "▲" : "▼")
+
+                    @Math.Abs(stock.ChangePercent).ToString("0.00")%
+
+                </span>
+
+            </a>
+        }
+
+    </div>
+
+</div>

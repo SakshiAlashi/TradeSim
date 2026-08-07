@@ -1,0 +1,394 @@
+﻿/* ==========================================================
+   STOCK DETAILS PAGE
+   FINAL VERSION - PART 1
+========================================================== */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Inter",sans-serif;
+    background: #f8fafc;
+    color: #0f172a;
+    overflow: hidden;
+}
+
+.stock-page {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 12px 24px;
+    box-sizing: border-box;
+    background: #f8fafc;
+    overflow: hidden;
+}
+
+/*==========================================================
+HEADER
+==========================================================*/
+
+.stock-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    margin-bottom: 6px;
+}
+
+.back-link {
+    text-decoration: none;
+    color: #475569;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.watchlist-btn {
+    height: 40px;
+    padding: 0 18px;
+    border-radius: 10px;
+    border: 1px solid #dbe3ef;
+    background: #fff;
+    color: #334155;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .2s;
+}
+
+    .watchlist-btn:hover {
+        background: #f8fafc;
+    }
+
+.buy-btn,
+.sell-btn {
+    width: 92px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.buy-btn {
+    background: #16a34a;
+}
+
+    .buy-btn:hover {
+        background: #15803d;
+    }
+
+.sell-btn {
+    background: #dc2626;
+}
+
+    .sell-btn:hover {
+        background: #b91c1c;
+    }
+
+/* ==========================================================
+   SUMMARY BAR
+========================================================== */
+
+.stock-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #eef2f7;
+    flex-shrink: 0;
+}
+
+/* LEFT SIDE */
+
+.summary-company {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+}
+
+    .summary-company h1 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1.15;
+        color: #172554;
+    }
+
+.summary-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.exchange-pill,
+.equity-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 22px;
+    padding: 0 10px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.exchange-pill {
+    background: #eef4ff;
+    color: #2563eb;
+}
+
+.equity-pill {
+    background: #ffffff;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+
+/* RIGHT SIDE */
+
+.summary-price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 4px;
+}
+
+.stock-price {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+    color: #0f172a;
+}
+
+.stock-change {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.live-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    padding: 0 10px;
+    border-radius: 999px;
+    background: #ecfdf3;
+    color: #16a34a;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.positive {
+    color: #16a34a;
+}
+
+.negative {
+    color: #dc2626;
+}
+/*==========================================================
+TABS
+==========================================================*/
+
+.workspace-tabs {
+    display: flex;
+    gap: 28px;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+}
+
+.tab-btn {
+    border: none;
+    background: none;
+    padding: 12px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    position: relative;
+}
+
+    .tab-btn.active {
+        color: #2563eb;
+    }
+
+        .tab-btn.active::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 100%;
+            height: 3px;
+            border-radius: 2px;
+            background: #2563eb;
+        }
+/* ==========================================================
+   WORKSPACE
+========================================================== */
+
+.workspace-content {
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(0,1fr) 320px;
+    gap: 18px;
+    min-height: 0;
+    overflow: hidden;
+}
+
+
+/* ==========================================================
+   CHART
+========================================================== */
+
+.chart-container {
+    display: flex;
+    min-height: 0;
+}
+
+/*.chart-placeholder {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    overflow: hidden;
+    min-height: 0;
+    box-shadow: 0 2px 8px rgba(15,23,42,.04);
+}
+*/
+.chart-placeholder {
+    flex: 1;
+    display: flex;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    overflow: hidden;
+    min-height: 0;
+}
+
+
+/* ==========================================================
+   CHART BODY
+========================================================== */
+
+.chart-body {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    background: #fff;
+    position: relative;
+}
+
+/*.tradingview-widget-container {
+    width: 100%;
+    height: 100%;
+}
+
+#tradingview_chart {
+    width: 100%;
+    height: 100%;*/
+.tradingview-widget-container {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+}
+
+#tradingview_chart {
+    width: 100%;
+    height: 100%;
+}
+
+
+/* ==========================================================
+   MARKET PANEL
+========================================================== */
+
+.market-panel {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    padding: 18px;
+    overflow: auto;
+    box-shadow: 0 2px 8px rgba(15,23,42,.04);
+}
+
+.market-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #eef2f7;
+}
+
+    .market-row:last-child {
+        border-bottom: none;
+    }
+
+    .market-row span {
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .market-row strong {
+        color: #0f172a;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+
+/* ==========================================================
+   DAY RANGE
+========================================================== */
+
+.day-range {
+    margin-top: auto;
+    padding-top: 24px;
+}
+
+    .day-range > span {
+        display: block;
+        margin-bottom: 12px;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+.range-bar {
+    height: 6px;
+    border-radius: 999px;
+    background: #e2e8f0;
+    position: relative;
+}
+
+.range-indicator {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #2563eb;
+    top: -4px;
+    left: 62%;
+}
+
+.range-values {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #64748b;
+}
