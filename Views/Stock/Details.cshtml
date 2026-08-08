@@ -89,7 +89,7 @@
     </section>
 
     <!-- Workspace -->
-    <section class="workspace-content">
+    <section class="workspace-content" id="workspaceContent">
 
         <div class="chart-container">
 
@@ -175,11 +175,14 @@
             </div>
 
         </aside>
-
     </section>
+    <div class="drawer-overlay" id="orderDrawerOverlay">
 
+        <partial name="_OrderDrawer" />
+
+    </div>
 </div>
-<partial name="_OrderDrawer" />
+
 
 
 @section Scripts {

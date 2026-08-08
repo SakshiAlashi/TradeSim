@@ -13,7 +13,8 @@ namespace TradeSim.Controllers
                 Symbol = "RELIANCE",
                 LastPrice = 2845.50m,
                 Change = 25.40m,
-                ChangePercent = 0.90m
+                ChangePercent = 0.90m,
+                LotSize = 100,
             };
 
             return View(vm);

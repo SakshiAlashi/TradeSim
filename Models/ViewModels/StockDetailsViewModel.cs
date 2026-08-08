@@ -11,5 +11,7 @@
         public decimal Change { get; set; }
 
         public decimal ChangePercent { get; set; }
+
+        public int LotSize { get; set; }
     }
 }

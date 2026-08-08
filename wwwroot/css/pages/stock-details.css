@@ -258,18 +258,6 @@ TABS
     min-height: 0;
 }
 
-/*.chart-placeholder {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    overflow: hidden;
-    min-height: 0;
-    box-shadow: 0 2px 8px rgba(15,23,42,.04);
-}
-*/
 .chart-placeholder {
     flex: 1;
     display: flex;
@@ -292,15 +280,6 @@ TABS
     background: #fff;
     position: relative;
 }
-
-/*.tradingview-widget-container {
-    width: 100%;
-    height: 100%;
-}
-
-#tradingview_chart {
-    width: 100%;
-    height: 100%;*/
 .tradingview-widget-container {
     flex: 1;
     width: 100%;
@@ -391,4 +370,12 @@ TABS
     margin-top: 10px;
     font-size: 12px;
     color: #64748b;
+}
+.order-panel {
+    position: fixed;
+    top: 0;
+    right: -420px;
+    width: 420px;
+    height: 100vh;
+    transition: .3s;
 }

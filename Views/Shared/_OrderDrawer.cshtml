@@ -1,269 +1,4 @@
-﻿@* <div class="drawer-overlay" id="orderDrawerOverlay">
-
-    <aside class="order-drawer" id="orderDrawer">
-
-        <!-- Header -->
-
-        <div class="drawer-header">
-
-            <div>
-
-                <h3 class="drawer-title">
-                    BUY RELIANCE
-                </h3>
-
-                <div class="drawer-subtitle">
-
-                    <span>NSE</span>
-
-                    <span>₹2,845.50</span>
-
-                    <span class="positive">+23.45 (0.83%)</span>
-
-                </div>
-
-            </div>
-
-            <button id="closeOrderDrawer" class="drawer-close">
-                ✕
-            </button>
-
-        </div>
-
-        <!-- Segment -->
-
-        <div class="drawer-section">
-
-            <div class="segment-toggle">
-
-                <button class="segment-btn active">
-                    Delivery
-                </button>
-
-                <button class="segment-btn">
-                    Intraday
-                </button>
-
-            </div>
-
-        </div>
-
-        <!-- Quantity -->
-
-        <div class="drawer-section">
-
-            <label class="section-label">
-
-                Quantity
-
-            </label>
-
-            <div class="qty-row">
-
-                <button class="qty-btn">−</button>
-
-                <input type="number"
-                       value="10"
-                       class="qty-input" />
-
-                <button class="qty-btn">+</button>
-
-                <div class="lot-size">
-
-                    <span>Lot Size</span>
-
-                    <strong>1</strong>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- Execution -->
-
-        <div class="drawer-section">
-
-            <label class="section-label">
-
-                Execution
-
-            </label>
-
-            <div class="radio-group">
-
-                <label>
-
-                    <input type="radio"
-                           checked />
-
-                    Market
-
-                </label>
-
-                <label>
-
-                    <input type="radio" />
-
-                    Limit
-
-                </label>
-
-            </div>
-
-        </div>
-
-        <!-- Order Variety -->
-
-        <div class="drawer-section">
-
-            <label class="section-label">
-
-                Order Variety
-
-            </label>
-
-            <div class="order-types">
-
-                <button class="type-btn active">
-
-                    Regular
-
-                </button>
-
-                <button class="type-btn">
-
-                    SL
-
-                </button>
-
-                <button class="type-btn">
-
-                    SL-M
-
-                </button>
-
-                <button class="type-btn">
-
-                    AMO
-
-                </button>
-
-                <button class="type-btn">
-
-                    GTT
-
-                </button>
-
-            </div>
-
-        </div>
-
-        <!-- Validity -->
-
-        <div class="drawer-section">
-
-            <label class="section-label">
-
-                Validity
-
-            </label>
-
-            <div class="radio-group">
-
-                <label>
-
-                    <input type="radio"
-                           checked />
-
-                    DAY
-
-                </label>
-
-                <label>
-
-                    <input type="radio" />
-
-                    IOC
-
-                </label>
-
-            </div>
-
-        </div>
-
-        <!-- Charges -->
-
-        <div class="drawer-section charges">
-
-            <div class="charge-row">
-
-                <span>Estimated Value</span>
-
-                <strong>₹28,455.00</strong>
-
-            </div>
-
-            <div class="charge-row">
-
-                <span>Brokerage</span>
-
-                <strong>₹0.00</strong>
-
-            </div>
-
-            <div class="charge-row">
-
-                <span>Taxes & Charges</span>
-
-                <strong>₹43.21</strong>
-
-            </div>
-
-            <div class="charge-row total">
-
-                <span>Total</span>
-
-                <strong>₹28,498.21</strong>
-
-            </div>
-
-        </div>
-
-        <!-- Balance -->
-
-        <div class="drawer-section balance">
-
-            <span>
-
-                Available Balance
-
-            </span>
-
-            <strong>
-
-                ₹1,00,000.00
-
-            </strong>
-
-        </div>
-
-        <!-- Action -->
-
-        <div class="drawer-footer">
-
-            <button class="place-order-btn">
-
-                BUY NOW
-
-            </button>
-
-        </div>
-
-    </aside>
-
-</div> *@
-<aside class="order-drawer" id="orderDrawer">
+﻿<aside class="order-drawer" id="orderDrawer">
 
     <!-- HEADER -->
 
@@ -271,7 +6,7 @@
 
         <div class="drawer-header-left">
 
-            <h3 class="drawer-title">
+            <h3 id="orderDrawerTitle" class="drawer-title">
                 BUY RELIANCE
             </h3>
 
@@ -320,377 +55,183 @@
 
             <div class="segment-toggle">
 
-                <button class="segment-btn active"
-                        data-product="delivery">
-
+                <button id="deliveryBtn" class="segment-btn active" data-product="delivery">
                     Delivery
-
                 </button>
 
-                <button class="segment-btn"
-                        data-product="intraday">
+                <button id="intradayBtn" class="segment-btn" data-product="intraday">
 
                     Intraday
 
                 </button>
-
             </div>
 
         </div>
 
-
-
-        <!-- QUANTITY -->
+            
+        <!-- QUANTITY + PRICE -->
 
         <div class="drawer-section">
 
-            <label class="section-label">
+            <div class="quantity-price-row">
 
-                Quantity
+                <!-- QUANTITY -->
 
-            </label>
+                <div class="quantity-field">
 
-            <div class="quantity-wrapper">
+                    <label class="section-label">
+                        Quantity
+                    </label>
 
-                <div class="qty-control">
+                    <div class="qty-control">
 
-                    <button class="qty-btn"
-                            id="qtyMinus">
+                        <button class="qty-btn"
+                                id="qtyMinus"
+                                type="button">
+                            −
+                        </button>
 
-                        −
+                        <input id="qtyInput"
+                               class="qty-input"
+                               type="number"
+                               value="10"
+                               min="1" />
 
-                    </button>
+                        <button class="qty-btn"
+                                id="qtyPlus"
+                                type="button">
+                            +
+                        </button>
 
-                    <input id="qtyInput"
-                           class="qty-input"
+                    </div>
+
+                </div>
+
+
+                <!-- PRICE -->
+
+                <div class="price-field">
+
+                    <div class="price-label-row">
+
+                        <label class="section-label">
+                            Price (₹)
+                        </label>
+
+                        <label class="cmp-option">
+
+                            <input type="checkbox"
+                                   id="cmpCheckbox" />
+
+                            <span>CMP</span>
+
+                        </label>
+
+                    </div>
+
+                    <input id="priceInput"
+                           class="price-input"
                            type="number"
-                           value="10"
-                           min="1" />
-
-                    <button class="qty-btn"
-                            id="qtyPlus">
-
-                        +
-
-                    </button>
-
-                </div>
-
-                <div class="lot-card">
-
-                    <span>
-
-                        Lot Size
-
-                    </span>
-
-                    <strong>
-
-                        1
-
-                    </strong>
+                           value="2845.50"
+                           step="0.05" />
 
                 </div>
 
             </div>
 
         </div>
-
-
-
-        <!-- EXECUTION -->
-
-        <div class="drawer-section">
-
-            <label class="section-label">
-
-                Execution
-
-            </label>
-
-            <div class="execution-options">
-
-                <label class="radio-option">
-
-                    <input type="radio"
-                           name="execution"
-                           checked />
-
-                    <span class="radio-custom"></span>
-
-                    <span>
-
-                        Market
-
-                    </span>
-
-                </label>
-
-                <label class="radio-option">
-
-                    <input type="radio"
-                           name="execution" />
-
-                    <span class="radio-custom"></span>
-
-                    <span>
-
-                        Limit
-
-                    </span>
-
-                </label>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- DYNAMIC PRICE FIELDS -->
-
-        <div id="priceFields">
-        </div>
-
-
-
         <!-- ORDER TYPE -->
 
         <div class="drawer-section">
 
             <label class="section-label">
-
                 Order Variety
-
             </label>
 
             <div class="order-type-grid">
 
-                <button class="type-btn active"
-                        data-order="regular">
-
+                <button type="button" class="type-btn active" data-order="regular">
                     Regular
-
                 </button>
 
-                <button class="type-btn"
-                        data-order="sl">
-
+                <button type="button" class="type-btn" data-order="sl">
                     SL
-
                 </button>
 
-                <button class="type-btn"
-                        data-order="slm">
-
+                <button type="button" class="type-btn" data-order="slm">
                     SL-M
-
                 </button>
 
-                <button class="type-btn"
-                        data-order="amo">
-
+                <button type="button" class="type-btn" data-order="amo">
                     AMO
-
                 </button>
 
-                <button class="type-btn"
-                        data-order="gtt">
-
+                <button type="button" class="type-btn" data-order="gtt">
                     GTT
-
                 </button>
-
             </div>
 
         </div>
+        <!-- DYNAMIC ORDER VARIANT FIELDS -->
+
+        <div id="orderVariantFields"></div>
+
         <!-- VALIDITY -->
 
         <div class="drawer-section">
 
             <label class="section-label">
-
                 Validity
-
             </label>
 
             <div class="execution-options">
 
                 <label class="radio-option">
 
-                    <input type="radio"
-                           name="validity"
-                           checked />
+                    <input type="radio" id="dayValidity" name="validity" value="DAY" checked />
 
                     <span class="radio-custom"></span>
 
-                    <span>
-
-                        DAY
-
-                    </span>
+                    <span>DAY</span>
 
                 </label>
 
                 <label class="radio-option">
 
-                    <input type="radio"
-                           name="validity" />
+                    <input type="radio" id="iocValidity" name="validity" value="IOC" />
 
                     <span class="radio-custom"></span>
 
-                    <span>
-
-                        IOC
-
-                    </span>
+                    <span>IOC</span>
 
                 </label>
 
             </div>
 
         </div>
+        <!-- ORDER SUMMARY -->
 
+        <div class="order-summary">
 
+            <div class="summary-row">
 
-        <!-- ESTIMATED CHARGES -->
+                <span>Estimated Value</span>
 
-        <div class="drawer-section">
-
-            <label class="section-label">
-
-                Estimated Charges
-
-            </label>
-
-            <div class="charges-card">
-
-                <div class="charge-row">
-
-                    <span>
-
-                        Estimated Value
-
-                    </span>
-
-                    <strong>
-
-                        ₹28,455.00
-
-                    </strong>
-
-                </div>
-
-                <div class="charge-row">
-
-                    <span>
-
-                        Brokerage
-
-                    </span>
-
-                    <strong>
-
-                        ₹0.00
-
-                    </strong>
-
-                </div>
-
-                <div class="charge-row">
-
-                    <span>
-
-                        Taxes & Charges
-
-                    </span>
-
-                    <strong>
-
-                        ₹43.21
-
-                    </strong>
-
-                </div>
-
-                <div class="charge-divider"></div>
-
-                <div class="charge-row total-row">
-
-                    <span>
-
-                        Total Amount
-
-                    </span>
-
-                    <strong>
-
-                        ₹28,498.21
-
-                    </strong>
-
-                </div>
+                <strong id="estimatedOrderValue">
+                    ₹28,455.00
+                </strong>
 
             </div>
 
         </div>
+        <!-- FOOTER -->
 
+        <div class="drawer-footer">
 
-
-        <!-- BALANCE -->
-
-        <div class="drawer-section">
-
-            <div class="balance-card">
-
-                <div>
-
-                    <small>
-
-                        Available Balance
-
-                    </small>
-
-                    <h4>
-
-                        ₹1,00,000.00
-
-                    </h4>
-
-                </div>
-
-                <button class="add-funds-btn">
-
-                    Add Funds
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- FOOTER -->
-
-    <div class="drawer-footer">
-
-        <button class="place-order-btn">
-
-            <span>
-
+            <button id="placeOrderBtn" class="place-order-btn">
                 BUY NOW
+            </button>
 
-            </span>
+        </div>
 
-            <span>
-
-                ₹28,498.21
-
-            </span>
-
-        </button>
-
-    </div>
-
-</aside>
+    </aside>
