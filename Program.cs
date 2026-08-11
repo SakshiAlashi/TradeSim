@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using TradeSim.Data;
 using TradeSim.Models.Domain;
 using TradeSim.Services;
+using TradeSim.Services.Market;
 using TradeSim.Services.Providers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,8 +27,10 @@ builder.Services.AddDbContext<TradeSimDbContext>(options =>
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<MarketService>();
+builder.Services.AddScoped<WatchlistService>();
 builder.Services.AddScoped<IPortfolioService, PortfolioService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddSingleton<SimulatedMarketEngine>();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IMarketDataProvider, MockMarketProvider>();
 
@@ -35,6 +38,14 @@ builder.Services.AddScoped<PasswordHasher<User>>();
 
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider
+        .GetRequiredService<TradeSimDbContext>();
+
+    await TradeSimDataSeeder.SeedAsync(context);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

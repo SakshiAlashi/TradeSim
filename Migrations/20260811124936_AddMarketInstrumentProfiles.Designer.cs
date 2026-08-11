@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TradeSim.Data;
 
@@ -11,9 +12,11 @@ using TradeSim.Data;
 namespace TradeSim.Migrations
 {
     [DbContext(typeof(TradeSimDbContext))]
-    partial class TradeSimDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260811124936_AddMarketInstrumentProfiles")]
+    partial class AddMarketInstrumentProfiles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,7 +92,7 @@ namespace TradeSim.Migrations
                     b.HasIndex("TradableInstrumentId")
                         .IsUnique();
 
-                    b.ToTable("MarketInstrumentProfiles", (string)null);
+                    b.ToTable("MarketInstrumentProfiles");
                 });
 
             modelBuilder.Entity("TradeSim.Models.Domain.Order", b =>
@@ -164,7 +167,7 @@ namespace TradeSim.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("TradeSim.Models.Domain.PortfolioHolding", b =>
@@ -201,7 +204,7 @@ namespace TradeSim.Migrations
                     b.HasIndex("UserId", "TradableInstrumentId")
                         .IsUnique();
 
-                    b.ToTable("PortfolioHoldings", (string)null);
+                    b.ToTable("PortfolioHoldings");
                 });
 
             modelBuilder.Entity("TradeSim.Models.Domain.Position", b =>
@@ -245,7 +248,7 @@ namespace TradeSim.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Positions", (string)null);
+                    b.ToTable("Positions");
                 });
 
             modelBuilder.Entity("TradeSim.Models.Domain.TradableInstrument", b =>
@@ -275,17 +278,13 @@ namespace TradeSim.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Sector")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Symbol")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("TradableInstruments", (string)null);
+                    b.ToTable("TradableInstruments");
                 });
 
             modelBuilder.Entity("TradeSim.Models.Domain.User", b =>
@@ -335,7 +334,7 @@ namespace TradeSim.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("TradeSim.Models.Domain.UserWatchlistItem", b =>
@@ -368,7 +367,7 @@ namespace TradeSim.Migrations
                     b.HasIndex("UserId", "TradableInstrumentId")
                         .IsUnique();
 
-                    b.ToTable("UserWatchlistItems", (string)null);
+                    b.ToTable("UserWatchlistItems");
                 });
 
             modelBuilder.Entity("TradeSim.Models.Domain.MarketInstrumentProfile", b =>

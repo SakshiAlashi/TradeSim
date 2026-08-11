@@ -1,4 +1,4 @@
-﻿@model TradeSim.ViewModels.WatchlistViewModel
+﻿@* @model TradeSim.ViewModels.WatchlistViewModel
 
 @{
     ViewData["Title"] = "Watchlist";
@@ -65,4 +65,294 @@
 
     </div>
 
+</div> *@
+@model TradeSim.ViewModels.WatchlistViewModel
+
+@{
+    ViewData["Title"] = "Watchlist";
+    ViewData["PageTitle"] = "Watchlist";
+    ViewData["PageSubtitle"] = "Track your favourite stocks";
+}
+
+<div class="watchlist-page">
+
+    <!-- Tabs / Toolbar -->
+    <div class="watchlist-toolbar">
+
+        <div class="watchlist-tabs">
+
+            <button type="button"
+                    class="watchlist-tab active"
+                    data-tab="stocks">
+                My Watchlist
+            </button>
+
+            <button type="button"
+                    class="watchlist-tab"
+                    data-tab="indices">
+                Indices
+            </button>
+
+            <button type="button"
+                    class="watchlist-tab"
+                    data-tab="favorites">
+                Favorites
+            </button>
+
+        </div>
+
+        <button type="button" class="add-symbol-btn">
+            <i class="bi bi-plus"></i>
+            Add Stock
+        </button>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- STOCKS -->
+    <!-- ========================================== -->
+
+    <div id="stocks-tab" class="watchlist-tab-content active">
+
+        <div class="watchlist-list">
+
+            @foreach (var stock in Model.Stocks)
+            {
+                <a asp-controller="Stock"
+                   asp-action="Details"
+                   asp-route-symbol="@stock.Symbol"
+                   class="watchlist-row stock-row"
+                   data-symbol="@stock.Symbol"
+                   data-favorite="@stock.IsFavorite.ToString().ToLower()">
+
+                    <div class="symbol-section">
+
+                        <button type="button"
+                                class="favorite-btn"
+                                onclick="event.preventDefault(); event.stopPropagation();">
+
+                            <i class="bi @(stock.IsFavorite
+                                                            ? "bi-star-fill"
+                                                            : "bi-star")"></i>
+
+                        </button>
+
+                        <span class="symbol">
+                            @stock.Symbol
+                        </span>
+
+                    </div>
+
+                    <span class="price">
+                        ₹@stock.LastPrice.ToString("N2")
+                    </span>
+
+                    <span class="change @(stock.Change >= 0
+                                                ? "positive"
+                                                : "negative")">
+
+                        @(stock.Change >= 0 ? "▲" : "▼")
+
+                        @Math.Abs(stock.ChangePercent).ToString("0.00")%
+
+                    </span>
+
+                </a>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- INDICES -->
+    <!-- ========================================== -->
+
+    <div id="indices-tab"
+         class="watchlist-tab-content">
+
+        <div class="watchlist-list">
+
+            @if (Model.Indices.Any())
+            {
+                @foreach (var index in Model.Indices)
+                {
+                    <div class="watchlist-row">
+
+                        <div class="symbol-section">
+
+                            <span class="symbol">
+                                @index.Symbol
+                            </span>
+
+                        </div>
+
+                        <span class="price">
+                            ₹@index.LastPrice.ToString("N2")
+                        </span>
+
+                        <span class="change @(index.Change >= 0
+                                                        ? "positive"
+                                                        : "negative")">
+
+                            @(index.Change >= 0 ? "▲" : "▼")
+
+                            @Math.Abs(index.ChangePercent)
+                            .ToString("0.00")%
+
+                        </span>
+
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="empty-watchlist">
+                    No market indices available.
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- FAVORITES -->
+    <!-- ========================================== -->
+
+    <div id="favorites-tab"
+         class="watchlist-tab-content">
+
+        <div class="watchlist-list">
+
+            @foreach (var stock in Model.Stocks.Where(x => x.IsFavorite))
+            {
+                <a asp-controller="Stock"
+                   asp-action="Details"
+                   asp-route-symbol="@stock.Symbol"
+                   class="watchlist-row">
+
+                    <div class="symbol-section">
+
+                        <button type="button"
+                                class="favorite-btn"
+                                onclick="event.preventDefault(); event.stopPropagation();">
+
+                            <i class="bi bi-star-fill"></i>
+
+                        </button>
+
+                        <span class="symbol">
+                            @stock.Symbol
+                        </span>
+
+                    </div>
+
+                    <span class="price">
+                        ₹@stock.LastPrice.ToString("N2")
+                    </span>
+
+                    <span class="change @(stock.Change >= 0
+                                                ? "positive"
+                                                : "negative")">
+
+                        @(stock.Change >= 0 ? "▲" : "▼")
+
+                        @Math.Abs(stock.ChangePercent)
+                        .ToString("0.00")%
+
+                    </span>
+
+                </a>
+            }
+
+            @if (!Model.Stocks.Any(x => x.IsFavorite))
+            {
+                <div class="empty-watchlist">
+
+                    <i class="bi bi-star"></i>
+
+                    <p>No favorite stocks yet.</p>
+
+                    <small>
+                        Click the star beside a stock to add it to Favorites.
+                    </small>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
 </div>
+
+
+<!-- ========================================== -->
+<!-- TAB SCRIPT -->
+<!-- ========================================== -->
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const tabs =
+            document.querySelectorAll(".watchlist-tab");
+
+        const contents =
+            document.querySelectorAll(".watchlist-tab-content");
+
+
+        tabs.forEach(tab => {
+
+            tab.addEventListener("click", function () {
+
+                const selectedTab =
+                    this.dataset.tab;
+
+
+                // -------------------------------
+                // Remove active state from tabs
+                // -------------------------------
+
+                tabs.forEach(item => {
+                    item.classList.remove("active");
+                });
+
+
+                // -------------------------------
+                // Hide all tab contents
+                // -------------------------------
+
+                contents.forEach(content => {
+                    content.classList.remove("active");
+                });
+
+
+                // -------------------------------
+                // Activate selected tab
+                // -------------------------------
+
+                this.classList.add("active");
+
+
+                const selectedContent =
+                    document.getElementById(
+                        selectedTab + "-tab"
+                    );
+
+
+                if (selectedContent) {
+                    selectedContent.classList.add("active");
+                }
+
+            });
+
+        });
+
+    });
+
+</script>

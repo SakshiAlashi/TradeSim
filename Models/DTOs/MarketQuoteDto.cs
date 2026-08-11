@@ -2,6 +2,8 @@
 {
     public class MarketQuoteDto
     {
+        public int TradableInstrumentId { get; set; }
+
         public string Symbol { get; set; } = string.Empty;
 
         public string Name { get; set; } = string.Empty;
@@ -19,5 +21,7 @@
         public decimal Low { get; set; }
 
         public long Volume { get; set; }
+
+        public bool IsFavorite { get; set; }
     }
 }

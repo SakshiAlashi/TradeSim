@@ -13,7 +13,9 @@
         public string InstrumentToken { get; set; } = string.Empty;
 
         public string AssetClass { get; set; } = string.Empty;
+        public string Sector { get; set; } = string.Empty;
 
         public bool IsTradable { get; set; } = true;
+        public MarketInstrumentProfile? MarketInstrumentProfile { get; set; }
     }
 }

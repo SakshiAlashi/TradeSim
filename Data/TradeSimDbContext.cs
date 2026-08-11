@@ -18,6 +18,7 @@ namespace TradeSim.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<PortfolioHolding> PortfolioHoldings { get; set; }
         public DbSet<Position> Positions { get; set; }
+        public DbSet<MarketInstrumentProfile> MarketInstrumentProfiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -102,6 +103,64 @@ namespace TradeSim.Data
             modelBuilder.Entity<Position>()
                 .Property(p => p.EntryPrice)
                 .HasPrecision(18, 2);
+
+            modelBuilder.Entity<MarketInstrumentProfile>()
+                .HasOne(p => p.TradableInstrument)
+                .WithOne(i => i.MarketInstrumentProfile)
+                .HasForeignKey<MarketInstrumentProfile>(
+                    p => p.TradableInstrumentId);
+
+            modelBuilder.Entity<MarketInstrumentProfile>()
+                .HasIndex(p => p.TradableInstrumentId)
+                .IsUnique();
+
+            modelBuilder.Entity<MarketInstrumentProfile>()
+                .Property(p => p.BasePrice)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<MarketInstrumentProfile>()
+                .Property(p => p.PreviousClose)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<MarketInstrumentProfile>()
+                .Property(p => p.FiftyTwoWeekHigh)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<MarketInstrumentProfile>()
+                .Property(p => p.FiftyTwoWeekLow)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<MarketInstrumentProfile>()
+                .Property(p => p.TickSize)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<MarketInstrumentProfile>()
+                .Property(p => p.PriceBandPercent)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<MarketInstrumentProfile>()
+                .Property(p => p.SupportLevel)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<MarketInstrumentProfile>()
+                .Property(p => p.ResistanceLevel)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<MarketInstrumentProfile>()
+                .Property(p => p.VolatilityPercent)
+                .HasPrecision(18, 4);
+
+            modelBuilder.Entity<MarketInstrumentProfile>()
+                .Property(p => p.Beta)
+                .HasPrecision(18, 4);
+
+            modelBuilder.Entity<MarketInstrumentProfile>()
+                .Property(p => p.TrendBias)
+                .HasPrecision(18, 4);
+
+            modelBuilder.Entity<MarketInstrumentProfile>()
+                .Property(p => p.MomentumBias)
+                .HasPrecision(18, 4);
         }
 
     }

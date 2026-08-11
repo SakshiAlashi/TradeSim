@@ -285,3 +285,44 @@
     align-items: center;
     gap: 8px;
 }
+.watchlist-tab-content {
+    display: none;
+}
+
+    .watchlist-tab-content.active {
+        display: block;
+    }
+
+.watchlist-tab {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+    .watchlist-tab.active {
+        color: #2563eb;
+    }
+
+.empty-watchlist {
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #8b95a7;
+    text-align: center;
+}
+
+    .empty-watchlist i {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    .empty-watchlist p {
+        margin: 0 0 4px;
+        font-weight: 600;
+    }
+
+    .empty-watchlist small {
+        color: #a0a8b5;
+    }
