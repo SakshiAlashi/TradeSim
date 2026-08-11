@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TradeSim.Data;
 
@@ -11,9 +12,11 @@ using TradeSim.Data;
 namespace TradeSim.Migrations
 {
     [DbContext(typeof(TradeSimDbContext))]
-    partial class TradeSimDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260809145503_AddOrders")]
+    partial class AddOrders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,87 +98,6 @@ namespace TradeSim.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("TradeSim.Models.Domain.PortfolioHolding", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("AverageBuyPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TradableInstrumentId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TradableInstrumentId");
-
-                    b.HasIndex("UserId", "TradableInstrumentId")
-                        .IsUnique();
-
-                    b.ToTable("PortfolioHoldings");
-                });
-
-            modelBuilder.Entity("TradeSim.Models.Domain.Position", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("EntryPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Product")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Side")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TradableInstrumentId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TradableInstrumentId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Positions");
                 });
 
             modelBuilder.Entity("TradeSim.Models.Domain.TradableInstrument", b =>
@@ -298,44 +220,6 @@ namespace TradeSim.Migrations
                 });
 
             modelBuilder.Entity("TradeSim.Models.Domain.Order", b =>
-                {
-                    b.HasOne("TradeSim.Models.Domain.TradableInstrument", "TradableInstrument")
-                        .WithMany()
-                        .HasForeignKey("TradableInstrumentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TradeSim.Models.Domain.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TradableInstrument");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("TradeSim.Models.Domain.PortfolioHolding", b =>
-                {
-                    b.HasOne("TradeSim.Models.Domain.TradableInstrument", "TradableInstrument")
-                        .WithMany()
-                        .HasForeignKey("TradableInstrumentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TradeSim.Models.Domain.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TradableInstrument");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("TradeSim.Models.Domain.Position", b =>
                 {
                     b.HasOne("TradeSim.Models.Domain.TradableInstrument", "TradableInstrument")
                         .WithMany()

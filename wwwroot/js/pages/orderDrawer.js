@@ -408,4 +408,114 @@
     // Initial state
     setOrderType("regular");
     updateEstimatedOrderValue();
+
+    // ==========================================================
+    // PLACE ORDER
+    // ==========================================================
+
+    placeOrderBtn.addEventListener("click", async () => {
+
+        const quantity = parseInt(qtyInput.value) || 0;
+        const price = parseFloat(priceInput.value) || 0;
+
+        if (quantity <= 0) {
+            alert("Quantity must be greater than zero.");
+            return;
+        }
+
+        if (price <= 0) {
+            alert("Price must be greater than zero.");
+            return;
+        }
+
+        // Get dynamic order variant values
+        let triggerPrice = null;
+        let limitPrice = null;
+
+        const variantInputs =
+            orderVariantFields.querySelectorAll(".price-input");
+
+        if (selectedOrderType === "sl") {
+
+            triggerPrice =
+                parseFloat(variantInputs[0]?.value) || null;
+
+            limitPrice =
+                parseFloat(variantInputs[1]?.value) || null;
+        }
+
+        if (selectedOrderType === "slm") {
+
+            triggerPrice =
+                parseFloat(variantInputs[0]?.value) || null;
+        }
+
+        if (selectedOrderType === "gtt") {
+
+            triggerPrice =
+                parseFloat(variantInputs[0]?.value) || null;
+
+            limitPrice =
+                parseFloat(variantInputs[1]?.value) || null;
+        }
+
+        const request = {
+            tradableInstrumentId: 1,
+            side: selectedSide.toUpperCase(),
+            product: selectedProduct.toUpperCase(),
+            quantity: quantity,
+            price: price,
+            usesCMP: cmpCheckbox.checked,
+            orderType: selectedOrderType.toUpperCase(),
+            triggerPrice: triggerPrice,
+            limitPrice: limitPrice,
+            validity:
+                document.querySelector(
+                    'input[name="validity"]:checked'
+                )?.value || "DAY"
+        };
+
+        try {
+
+            placeOrderBtn.disabled = true;
+
+            const response = await fetch("/Order/PlaceOrder", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(request)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+
+                alert(
+                    `Order placed successfully!\nOrder ID: ${result.orderId}`
+                );
+
+                overlay.classList.remove("open");
+
+            } else {
+
+                alert(result.message);
+            }
+
+        } catch (error) {
+
+            console.error("Order placement failed:", error);
+
+            alert(
+                "Something went wrong while placing the order."
+            );
+
+        } finally {
+
+            placeOrderBtn.disabled = false;
+        }
+    });
 });

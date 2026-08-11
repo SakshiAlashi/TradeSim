@@ -26,7 +26,8 @@ builder.Services.AddDbContext<TradeSimDbContext>(options =>
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<MarketService>();
-
+builder.Services.AddScoped<IPortfolioService, PortfolioService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IMarketDataProvider, MockMarketProvider>();
 
