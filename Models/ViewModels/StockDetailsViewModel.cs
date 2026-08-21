@@ -13,5 +13,6 @@
         public decimal ChangePercent { get; set; }
 
         public int LotSize { get; set; }
+        public int TradableInstrumentId { get; set; }
     }
 }

@@ -9,7 +9,8 @@
     <link rel="stylesheet" href="~/css/compo/order-drawer.css" asp-append-version="true" />
     
 }
-<div class="stock-page">
+<div class="stock-page"
+     data-symbol="@Model.Symbol">
 
     <!-- Header -->
     <header class="stock-header">
@@ -178,7 +179,8 @@
     </section>
     <div class="drawer-overlay" id="orderDrawerOverlay">
 
-        <partial name="_OrderDrawer" />
+        <partial name="_OrderDrawer"
+                 model="Model" />
 
     </div>
 </div>
@@ -193,14 +195,13 @@
 
     <script src="~/js/pages/orderDrawer.js" asp-append-version="true"></script>
     <script>
-
         new TradingView.widget({
 
             container_id: "tradingview_chart",
 
             autosize: true,
 
-            symbol: "NSE:RELIANCE",
+            symbol: "NSE:@Model.Symbol",
 
             interval: "15",
 

@@ -24,6 +24,9 @@
 
     const orderDrawerTitle = document.getElementById("orderDrawerTitle");
     const placeOrderBtn = document.getElementById("placeOrderBtn");
+
+    const stockPage = document.querySelector(".stock-page");
+    const stockSymbol = stockPage.dataset.symbol;
         
     const qtyMinus = document.getElementById("qtyMinus");
     const qtyPlus = document.getElementById("qtyPlus");
@@ -106,12 +109,12 @@
 
         if (side === "buy") {
 
-            orderDrawerTitle.textContent = "BUY RELIANCE";
+            orderDrawerTitle.textContent = `BUY ${stockSymbol}`;
             placeOrderBtn.textContent = "BUY NOW";
 
         } else {
 
-            orderDrawerTitle.textContent = "SELL RELIANCE";
+            orderDrawerTitle.textContent = `SELL ${stockSymbol}`;
             placeOrderBtn.textContent = "SELL NOW";
 
         }

@@ -7,7 +7,7 @@
         <div class="drawer-header-left">
 
             <h3 id="orderDrawerTitle" class="drawer-title">
-                BUY RELIANCE
+                BUY @Model.Symbol
             </h3>
 
             <div class="drawer-subtitle">
@@ -17,11 +17,14 @@
                 </span>
 
                 <span class="current-price">
-                    ₹2,845.50
+                    ₹@Model.LastPrice.ToString("N2")
                 </span>
 
-                <span class="price-change positive">
-                    +23.45 (0.83%)
+                <span class="price-change @(Model.Change >= 0 ? "positive" : "negative")">
+
+                    @(Model.Change >= 0 ? "+" : "-")@Math.Abs(Model.Change).ToString("N2")
+                    (@Math.Abs(Model.ChangePercent).ToString("0.00")%)
+
                 </span>
 
             </div>
@@ -129,11 +132,11 @@
 
                     </div>
 
-                    <input id="priceInput"
-                           class="price-input"
-                           type="number"
-                           value="2845.50"
-                           step="0.05" />
+                    <<input id="priceInput"
+                                class="price-input"
+                                type="number"
+                                value="@Model.LastPrice"
+                                step="0.05" />
 
                 </div>
 
