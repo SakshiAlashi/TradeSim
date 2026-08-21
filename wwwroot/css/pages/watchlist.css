@@ -326,3 +326,37 @@
     .empty-watchlist small {
         color: #a0a8b5;
     }
+/* ==========================================
+   ADD TO WATCHLIST BUTTON
+========================================== */
+
+.add-watchlist-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 8px;
+    background: #f1f5f9;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+    .add-watchlist-btn:hover:not(:disabled) {
+        background: #e2e8f0;
+        color: #2563eb;
+        transform: scale(1.05);
+    }
+
+    .add-watchlist-btn i {
+        font-size: 15px;
+    }
+
+    .add-watchlist-btn:disabled {
+        background: #dcfce7;
+        color: #16a34a;
+        cursor: default;
+    }

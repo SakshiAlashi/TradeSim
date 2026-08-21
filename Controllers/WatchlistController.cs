@@ -9,19 +9,18 @@ namespace TradeSim.Controllers
     public class WatchlistController : Controller
     {
         private readonly MarketService marketService;
+        private readonly WatchlistService watchlistService;
 
         public WatchlistController(
-            MarketService marketService)
+            MarketService marketService,
+            WatchlistService watchlistService)
         {
             this.marketService = marketService;
+            this.watchlistService = watchlistService;
         }
 
         public async Task<IActionResult> Index()
         {
-            // --------------------------------------------------
-            // Get logged-in user's ID
-            // --------------------------------------------------
-
             var userIdClaim =
                 User.FindFirst("UserId");
 
@@ -37,26 +36,13 @@ namespace TradeSim.Controllers
                 return Unauthorized();
             }
 
-            // --------------------------------------------------
-            // Get ALL market quotes
-            //
-            // MarketService also determines whether each
-            // instrument is a favorite for this user.
-            // --------------------------------------------------
-
             var quotes =
                 await marketService.GetMarketQuotesAsync(userId);
 
-            // --------------------------------------------------
-            // Build Watchlist ViewModel
-            // --------------------------------------------------
-
             var viewModel = new WatchlistViewModel
             {
-                // ALL available stocks are displayed.
                 Stocks = quotes,
 
-                // Indices are kept separately.
                 Indices = quotes
                     .Where(x =>
                         x.Symbol == "NIFTY" ||
@@ -65,6 +51,105 @@ namespace TradeSim.Controllers
             };
 
             return View(viewModel);
+        }
+
+
+        // ==========================================================
+        // ADD TO WATCHLIST
+        // ==========================================================
+
+        [HttpPost]
+        public async Task<IActionResult> Add(int instrumentId)
+        {
+            var userIdClaim =
+                User.FindFirst("UserId");
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            if (!Guid.TryParse(
+                    userIdClaim.Value,
+                    out Guid userId))
+            {
+                return Unauthorized();
+            }
+
+            await watchlistService.AddToWatchlistAsync(
+                userId,
+                instrumentId);
+
+            return Ok(new
+            {
+                success = true
+            });
+        }
+
+        // ==========================================================
+        // REMOVE FROM WATCHLIST
+        // ==========================================================
+
+        [HttpPost]
+        public async Task<IActionResult> Remove(int instrumentId)
+        {
+            var userIdClaim =
+                User.FindFirst("UserId");
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            if (!Guid.TryParse(
+                    userIdClaim.Value,
+                    out Guid userId))
+            {
+                return Unauthorized();
+            }
+
+            await watchlistService.RemoveFromWatchlistAsync(
+                userId,
+                instrumentId);
+
+            return Ok(new
+            {
+                success = true
+            });
+        }
+
+        // ==========================================================
+        // TOGGLE FAVORITE
+        // ==========================================================
+
+        [HttpPost]
+        public async Task<IActionResult> ToggleFavorite(int instrumentId)
+        {
+            var userIdClaim =
+                User.FindFirst("UserId");
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            if (!Guid.TryParse(
+                    userIdClaim.Value,
+                    out Guid userId))
+            {
+                return Unauthorized();
+            }
+
+            var isFavorite =
+                await watchlistService.ToggleFavoriteAsync(
+                    userId,
+                    instrumentId);
+
+            return Ok(new
+            {
+                success = true,
+                isFavorite = isFavorite
+            });
         }
     }
 }

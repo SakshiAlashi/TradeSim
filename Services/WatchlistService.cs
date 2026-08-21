@@ -65,7 +65,7 @@ namespace TradeSim.Services
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task ToggleFavoriteAsync(
+        public async Task<bool> ToggleFavoriteAsync(
             Guid userId,
             int instrumentId)
         {
@@ -76,11 +76,13 @@ namespace TradeSim.Services
                         x.TradableInstrumentId == instrumentId);
 
             if (item == null)
-                return;
+                return false;
 
             item.IsFavorite = !item.IsFavorite;
 
             await dbContext.SaveChangesAsync();
+
+            return item.IsFavorite;
         }
     }
 }

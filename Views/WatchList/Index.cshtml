@@ -1,97 +1,40 @@
-﻿@* @model TradeSim.ViewModels.WatchlistViewModel
+﻿@model TradeSim.ViewModels.WatchlistViewModel
 
 @{
     ViewData["Title"] = "Watchlist";
     ViewData["PageTitle"] = "Watchlist";
-    ViewData["PageSubtitle"] = "Track your favourite stocks";
+    ViewData["PageSubtitle"] = "Track your stocks and favorites";
 }
 
 <div class="watchlist-page">
-    <!-- Tabs -->
+
+    <!-- ========================================== -->
+    <!-- TABS / TOOLBAR -->
+    <!-- ========================================== -->
 
     <div class="watchlist-toolbar">
 
         <div class="watchlist-tabs">
 
-            <button class="active">My Watchlist</button>
-            <button>Indices</button>
-            <button>Favorites</button>
-
-        </div>
-
-        <button class="add-symbol-btn">
-            <i class="bi bi-plus"></i>
-            Add Stock
-        </button>
-
-    </div>
-
-    <!-- List -->
-    <div class="watchlist-list">
-
-        @foreach (var stock in Model.Stocks)
-        {
-            <a asp-controller="Stock"
-               asp-action="Details"
-               asp-route-symbol="@stock.Symbol"
-               class="watchlist-row">
-
-                <div class="symbol-section">
-
-                    <button class="favorite-btn">
-                        <i class="bi bi-star"></i>
-                    </button>
-
-                    <span class="symbol">
-                        @stock.Symbol
-                    </span>
-
-                </div>
-
-                <span class="price">
-                    ₹@stock.LastPrice.ToString("N2")
-                </span>
-
-                <span class="change @(stock.Change >= 0 ? "positive" : "negative")">
-
-                    @(stock.Change >= 0 ? "▲" : "▼")
-
-                    @Math.Abs(stock.ChangePercent).ToString("0.00")%
-
-                </span>
-
-            </a>
-        }
-
-    </div>
-
-</div> *@
-@model TradeSim.ViewModels.WatchlistViewModel
-
-@{
-    ViewData["Title"] = "Watchlist";
-    ViewData["PageTitle"] = "Watchlist";
-    ViewData["PageSubtitle"] = "Track your favourite stocks";
-}
-
-<div class="watchlist-page">
-
-    <!-- Tabs / Toolbar -->
-    <div class="watchlist-toolbar">
-
-        <div class="watchlist-tabs">
+            <!-- ALL STOCKS -->
 
             <button type="button"
                     class="watchlist-tab active"
-                    data-tab="stocks">
-                My Watchlist
+                    data-tab="all-stocks">
+                All Stocks
             </button>
+
+
+            <!-- MY WATCHLIST -->
 
             <button type="button"
                     class="watchlist-tab"
-                    data-tab="indices">
-                Indices
+                    data-tab="watchlist">
+                My Watchlist
             </button>
+
+
+            <!-- FAVORITES -->
 
             <button type="button"
                     class="watchlist-tab"
@@ -99,42 +42,49 @@
                 Favorites
             </button>
 
+
+            <!-- INDICES -->
+
+            <button type="button"
+                    class="watchlist-tab"
+                    data-tab="indices">
+                Indices
+            </button>
+
         </div>
-
-        <button type="button" class="add-symbol-btn">
-            <i class="bi bi-plus"></i>
-            Add Stock
-        </button>
-
     </div>
 
 
     <!-- ========================================== -->
-    <!-- STOCKS -->
+    <!-- ALL STOCKS -->
     <!-- ========================================== -->
 
-    <div id="stocks-tab" class="watchlist-tab-content active">
+    <div id="all-stocks-tab"
+         class="watchlist-tab-content active">
 
         <div class="watchlist-list">
 
-            @foreach (var stock in Model.Stocks)
+            @foreach (var stock in Model.Stocks
+                .Where(x =>
+                    x.Symbol != "NIFTY" &&
+                    x.Symbol != "BANKNIFTY"))
             {
                 <a asp-controller="Stock"
                    asp-action="Details"
                    asp-route-symbol="@stock.Symbol"
                    class="watchlist-row stock-row"
-                   data-symbol="@stock.Symbol"
-                   data-favorite="@stock.IsFavorite.ToString().ToLower()">
+                   data-symbol="@stock.Symbol">
 
                     <div class="symbol-section">
 
-                        <button type="button"
-                                class="favorite-btn"
-                                onclick="event.preventDefault(); event.stopPropagation();">
+                        <!-- ADD TO WATCHLIST -->
 
-                            <i class="bi @(stock.IsFavorite
-                                                            ? "bi-star-fill"
-                                                            : "bi-star")"></i>
+                        <button type="button"
+                                class="add-watchlist-btn"
+                                data-instrument-id="@stock.TradableInstrumentId"
+                            @(stock.IsInWatchlist ? "disabled" : "")>
+
+                            <i class="bi @(stock.IsInWatchlist ? "bi-check" : "bi-plus")"></i>
 
                         </button>
 
@@ -149,8 +99,8 @@
                     </span>
 
                     <span class="change @(stock.Change >= 0
-                                                ? "positive"
-                                                : "negative")">
+                                                                        ? "positive"
+                                                                        : "negative")">
 
                         @(stock.Change >= 0 ? "▲" : "▼")
 
@@ -167,50 +117,84 @@
 
 
     <!-- ========================================== -->
-    <!-- INDICES -->
+    <!-- MY WATCHLIST -->
     <!-- ========================================== -->
 
-    <div id="indices-tab"
-         class="watchlist-tab-content">
+    <div id="watchlist-tab" class="watchlist-tab-content">
 
-        <div class="watchlist-list">
+        <div id="watchlist-list" class="watchlist-list">
 
-            @if (Model.Indices.Any())
+            @foreach (var stock in Model.Stocks
+                .Where(x =>
+                    x.IsInWatchlist &&
+                    x.Symbol != "NIFTY" &&
+                    x.Symbol != "BANKNIFTY"))
             {
-                @foreach (var index in Model.Indices)
-                {
-                    <div class="watchlist-row">
+                <a asp-controller="Stock"
+                   asp-action="Details"
+                   asp-route-symbol="@stock.Symbol"
+                   class="watchlist-row stock-row"
+                   data-symbol="@stock.Symbol"
+                   data-instrument-id="@stock.TradableInstrumentId">
 
-                        <div class="symbol-section">
+                    <div class="symbol-section">
 
-                            <span class="symbol">
-                                @index.Symbol
-                            </span>
+                        <button type="button"
+                                class="favorite-btn"
+                                data-instrument-id="@stock.TradableInstrumentId">
 
-                        </div>
+                            <i class="bi @(stock.IsFavorite
+                                                            ? "bi-star-fill"
+                                                            : "bi-star")"></i>
 
-                        <span class="price">
-                            ₹@index.LastPrice.ToString("N2")
-                        </span>
+                        </button>
 
-                        <span class="change @(index.Change >= 0
-                                                        ? "positive"
-                                                        : "negative")">
 
-                            @(index.Change >= 0 ? "▲" : "▼")
+                        <button type="button"
+                                class="remove-watchlist-btn">
 
-                            @Math.Abs(index.ChangePercent)
-                            .ToString("0.00")%
+                            <i class="bi bi-dash-circle"></i>
 
+                        </button>
+
+                        <span class="symbol">
+                            @stock.Symbol
                         </span>
 
                     </div>
-                }
+
+                    <span class="price">
+                        ₹@stock.LastPrice.ToString("N2")
+                    </span>
+
+                    <span class="change @(stock.Change >= 0
+                                                                        ? "positive"
+                                                                        : "negative")">
+
+                        @(stock.Change >= 0 ? "▲" : "▼")
+
+                        @Math.Abs(stock.ChangePercent).ToString("0.00")%
+
+                    </span>
+
+                </a>
             }
-            else
+
+            @if (!Model.Stocks.Any(x =>
+                x.IsInWatchlist &&
+                x.Symbol != "NIFTY" &&
+                x.Symbol != "BANKNIFTY"))
             {
                 <div class="empty-watchlist">
-                    No market indices available.
+
+                    <i class="bi bi-eye"></i>
+
+                    <p>Your watchlist is empty.</p>
+
+                    <small>
+                        Add stocks from All Stocks to start tracking them.
+                    </small>
+
                 </div>
             }
 
@@ -219,27 +203,33 @@
     </div>
 
 
-    <!-- ========================================== -->
+    @* <!-- ========================================== -->
     <!-- FAVORITES -->
-    <!-- ========================================== -->
+    <!-- ========================================== --> *@
 
     <div id="favorites-tab"
          class="watchlist-tab-content">
 
         <div class="watchlist-list">
 
-            @foreach (var stock in Model.Stocks.Where(x => x.IsFavorite))
+            @foreach (var stock in Model.Stocks
+                .Where(x =>
+                    x.IsFavorite &&
+                    x.Symbol != "NIFTY" &&
+                    x.Symbol != "BANKNIFTY"))
             {
                 <a asp-controller="Stock"
                    asp-action="Details"
                    asp-route-symbol="@stock.Symbol"
-                   class="watchlist-row">
+                   class="watchlist-row stock-row"
+                   data-instrument-id="@stock.TradableInstrumentId"
+                   data-symbol="@stock.Symbol">
 
                     <div class="symbol-section">
 
                         <button type="button"
                                 class="favorite-btn"
-                                onclick="event.preventDefault(); event.stopPropagation();">
+                                data-instrument-id="@stock.TradableInstrumentId">
 
                             <i class="bi bi-star-fill"></i>
 
@@ -256,20 +246,22 @@
                     </span>
 
                     <span class="change @(stock.Change >= 0
-                                                ? "positive"
-                                                : "negative")">
+                                                                        ? "positive"
+                                                                        : "negative")">
 
                         @(stock.Change >= 0 ? "▲" : "▼")
 
-                        @Math.Abs(stock.ChangePercent)
-                        .ToString("0.00")%
+                        @Math.Abs(stock.ChangePercent).ToString("0.00")%
 
                     </span>
 
                 </a>
             }
 
-            @if (!Model.Stocks.Any(x => x.IsFavorite))
+            @if (!Model.Stocks.Any(x =>
+                x.IsFavorite &&
+                x.Symbol != "NIFTY" &&
+                x.Symbol != "BANKNIFTY"))
             {
                 <div class="empty-watchlist">
 
@@ -278,7 +270,7 @@
                     <p>No favorite stocks yet.</p>
 
                     <small>
-                        Click the star beside a stock to add it to Favorites.
+                        Mark stocks in your watchlist as favorites for quick access.
                     </small>
 
                 </div>
@@ -288,71 +280,62 @@
 
     </div>
 
-</div>
 
+    @* <!-- ========================================== -->
+    <!-- INDICES -->
+    <!-- ========================================== --> *@
 
-<!-- ========================================== -->
-<!-- TAB SCRIPT -->
-<!-- ========================================== -->
+    <div id="indices-tab"
+         class="watchlist-tab-content">
 
-<script>
+        <div class="watchlist-list">
 
-    document.addEventListener("DOMContentLoaded", function () {
+            @if (Model.Indices.Any())
+            {
+                @foreach (var index in Model.Indices)
+                {
+                    <a asp-controller="Stock"
+                       asp-action="Details"
+                       asp-route-symbol="@index.Symbol"
+                       class="watchlist-row">
 
-        const tabs =
-            document.querySelectorAll(".watchlist-tab");
+                        <div class="symbol-section">
 
-        const contents =
-            document.querySelectorAll(".watchlist-tab-content");
+                            <span class="symbol">
+                                @index.Symbol
+                            </span>
 
+                        </div>
 
-        tabs.forEach(tab => {
+                        <span class="price">
+                            ₹@index.LastPrice.ToString("N2")
+                        </span>
 
-            tab.addEventListener("click", function () {
+                        <span class="change @(index.Change >= 0
+                                                            ? "positive"
+                                                            : "negative")">
 
-                const selectedTab =
-                    this.dataset.tab;
+                            @(index.Change >= 0 ? "▲" : "▼")
 
+                            @Math.Abs(index.ChangePercent).ToString("0.00")%
 
-                // -------------------------------
-                // Remove active state from tabs
-                // -------------------------------
+                        </span>
 
-                tabs.forEach(item => {
-                    item.classList.remove("active");
-                });
-
-
-                // -------------------------------
-                // Hide all tab contents
-                // -------------------------------
-
-                contents.forEach(content => {
-                    content.classList.remove("active");
-                });
-
-
-                // -------------------------------
-                // Activate selected tab
-                // -------------------------------
-
-                this.classList.add("active");
-
-
-                const selectedContent =
-                    document.getElementById(
-                        selectedTab + "-tab"
-                    );
-
-
-                if (selectedContent) {
-                    selectedContent.classList.add("active");
+                    </a>
                 }
+            }
+            else
+            {
+                <div class="empty-watchlist">
+                    No market indices available.
+                </div>
+            }
 
-            });
+        </div>
 
-        });
+    </div>
 
-    });
-
-</script>
+</div>
+@section Scripts {
+    <script src="~/js/pages/watchlist.js" asp-append-version="true"></script>
+}

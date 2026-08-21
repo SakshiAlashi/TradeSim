@@ -7,10 +7,12 @@ namespace TradeSim.Services
     public class OrderService : IOrderService
     {
         private readonly TradeSimDbContext _context;
+        private readonly MarketService _marketService;
 
-        public OrderService(TradeSimDbContext context)
+        public OrderService(TradeSimDbContext context, MarketService marketService)
         {
             _context = context;
+            _marketService = marketService;
         }
 
         public async Task<Order> PlaceOrderAsync(
@@ -35,21 +37,34 @@ namespace TradeSim.Services
 
 
             // --------------------------------------------------
-            // 2. Validate price
-            // --------------------------------------------------
-
-            if (price <= 0)
-                throw new InvalidOperationException("Price must be greater than zero.");
-
-
-            // --------------------------------------------------
-            // 3. Validate side
+            // 2. Validate side
             // --------------------------------------------------
 
             side = side.ToUpperInvariant();
 
             if (side != "BUY" && side != "SELL")
                 throw new InvalidOperationException("Invalid order side.");
+
+
+            // --------------------------------------------------
+            // 3. Validate order type
+            //
+            // Only immediate-execution REGULAR orders are
+            // supported right now — there's no resting-order /
+            // trigger-watcher engine yet, so SL, SL-M, GTT, and
+            // AMO orders must not be silently filled as if they
+            // were regular market orders.
+            // --------------------------------------------------
+
+            var normalizedOrderType = orderType.ToUpperInvariant();
+
+            if (normalizedOrderType != "REGULAR")
+            {
+                throw new InvalidOperationException(
+                    $"Order type '{orderType}' is not supported yet. " +
+                    "Only regular market/limit orders execute immediately " +
+                    "in this simulator right now.");
+            }
 
 
             // --------------------------------------------------
@@ -78,11 +93,53 @@ namespace TradeSim.Services
 
 
             // --------------------------------------------------
-            // 6. Calculate order value
+            // 6. Resolve the real execution price server-side.
+            //
+            // The client-supplied `price` is NEVER trusted for
+            // money math — only `executionPrice`, resolved from
+            // the simulated market engine, is used below.
             // --------------------------------------------------
 
-            decimal totalAmount = quantity * price;
+            decimal marketPrice =
+                await _marketService.GetCurrentPriceAsync(tradableInstrumentId);
 
+            decimal executionPrice;
+
+            if (usesCMP)
+            {
+                executionPrice = marketPrice;
+            }
+            else
+            {
+                if (limitPrice is null or <= 0)
+                {
+                    throw new InvalidOperationException(
+                        "A valid limit price is required when not using CMP.");
+                }
+
+                if (side == "BUY" && marketPrice > limitPrice.Value)
+                {
+                    throw new InvalidOperationException(
+                        $"Order not marketable: current price ({marketPrice}) " +
+                        $"is above your limit price ({limitPrice.Value}).");
+                }
+
+                if (side == "SELL" && marketPrice < limitPrice.Value)
+                {
+                    throw new InvalidOperationException(
+                        $"Order not marketable: current price ({marketPrice}) " +
+                        $"is below your limit price ({limitPrice.Value}).");
+                }
+
+                executionPrice = marketPrice;
+            }
+
+
+            // --------------------------------------------------
+            // 7. Calculate order value
+            // --------------------------------------------------
+
+            decimal totalAmount = quantity * executionPrice;
 
             // --------------------------------------------------
             // 7. BUY validation
@@ -123,7 +180,7 @@ namespace TradeSim.Services
                             UserId = userId,
                             TradableInstrumentId = tradableInstrumentId,
                             Quantity = quantity,
-                            AverageBuyPrice = price,
+                            AverageBuyPrice = executionPrice,
                             CreatedAt = DateTime.UtcNow,
                             UpdatedAt = DateTime.UtcNow
                         };
@@ -137,7 +194,7 @@ namespace TradeSim.Services
                             holding.Quantity * holding.AverageBuyPrice;
 
                         decimal newPurchaseValue =
-                            quantity * price;
+                            quantity * executionPrice;
 
                         int newQuantity =
                             holding.Quantity + quantity;
@@ -172,7 +229,7 @@ namespace TradeSim.Services
                             TradableInstrumentId = tradableInstrumentId,
                             Side = "BUY",
                             Quantity = quantity,
-                            EntryPrice = price,
+                            EntryPrice = executionPrice,
                             Product = "INTRADAY",
                             CreatedAt = DateTime.UtcNow,
                             UpdatedAt = DateTime.UtcNow
@@ -187,7 +244,7 @@ namespace TradeSim.Services
                             position.Quantity * position.EntryPrice;
 
                         decimal newPurchaseValue =
-                            quantity * price;
+                            quantity * executionPrice;
 
                         int newQuantity =
                             position.Quantity + quantity;
@@ -310,7 +367,7 @@ namespace TradeSim.Services
 
                 Quantity = quantity,
 
-                Price = price,
+                Price = executionPrice,
                 TotalAmount = totalAmount,
 
                 UsesCMP = usesCMP,
@@ -324,7 +381,7 @@ namespace TradeSim.Services
 
                 Status = "EXECUTED",
 
-                ExecutedPrice = price,
+                ExecutedPrice = executionPrice,
                 ExecutedAt = DateTime.UtcNow,
 
                 CreatedAt = DateTime.UtcNow

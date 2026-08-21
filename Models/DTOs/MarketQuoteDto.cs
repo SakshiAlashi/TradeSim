@@ -22,6 +22,8 @@
 
         public long Volume { get; set; }
 
+        public bool IsInWatchlist { get; set; }
+
         public bool IsFavorite { get; set; }
     }
 }
