@@ -69,6 +69,8 @@ namespace TradeSim.Controllers
 
             var vm = new StockDetailsViewModel
             {
+                TradableInstrumentId = stock.TradableInstrumentId,
+
                 CompanyName = stock.Name,
                 Symbol = stock.Symbol,
                 LastPrice = stock.LastPrice,
@@ -81,6 +83,34 @@ namespace TradeSim.Controllers
 
 
             return View(vm);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Candles(int tradableInstrumentId)
+        {
+            var userIdClaim =
+                User.FindFirst("UserId");
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            if (!Guid.TryParse(
+                    userIdClaim.Value,
+                    out Guid userId))
+            {
+                return Unauthorized();
+            }
+
+            // Make sure the instrument exists and
+            // initialize/update its market state.
+            await marketService.GetMarketQuotesAsync(userId);
+
+            var candles =
+                marketService.GetMarketCandles(
+                    tradableInstrumentId);
+
+            return Json(candles);
         }
     }
 }

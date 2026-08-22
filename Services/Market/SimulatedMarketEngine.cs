@@ -215,6 +215,86 @@ namespace TradeSim.Services.Market
                     LastUpdated =
                         DateTime.UtcNow
                 };
+            InitializeHistoricalCandles(config, marketStates[config.TradableInstrumentId]);
+        }
+        private void InitializeHistoricalCandles(
+    SimulatedMarketConfig config,
+    SimulatedMarketState state)
+        {
+            var candles = new List<SimulatedMarketCandle>();
+
+            decimal price = state.PreviousClose;
+
+            DateTime startTime =
+                DateTime.UtcNow
+                    .AddMinutes(-30);
+
+            for (int i = 0; i < 30; i++)
+            {
+                decimal randomShock =
+                    (decimal)(Random.Shared.NextDouble() * 2 - 1);
+
+                decimal movement =
+                    price *
+                    (config.VolatilityPercent / 100m) *
+                    0.02m *
+                    randomShock;
+
+                decimal close =
+                    price + movement;
+
+                if (config.TickSize > 0)
+                {
+                    close =
+                        Math.Round(
+                            close / config.TickSize,
+                            0,
+                            MidpointRounding.AwayFromZero)
+                        * config.TickSize;
+                }
+
+                close =
+                    Math.Round(close, 2);
+
+                decimal high =
+                    Math.Max(price, close);
+
+                decimal low =
+                    Math.Min(price, close);
+
+                candles.Add(
+                    new SimulatedMarketCandle
+                    {
+                        TradableInstrumentId =
+                            config.TradableInstrumentId,
+
+                        Symbol =
+                            config.Symbol,
+
+                        Time =
+                            startTime.AddMinutes(i),
+
+                        Open =
+                            price,
+
+                        High =
+                            high,
+
+                        Low =
+                            low,
+
+                        Close =
+                            close,
+
+                        Volume =
+                            Random.Shared.Next(1000, 10000)
+                    });
+
+                price = close;
+            }
+
+            marketCandles[
+                config.TradableInstrumentId] = candles;
         }
 
         public void UpdatePrice(int tradableInstrumentId)

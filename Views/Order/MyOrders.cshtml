@@ -1,0 +1,304 @@
+﻿@model IEnumerable<TradeSim.Models.ViewModels.OrderViewModel>
+
+@{
+    ViewData["Title"] = "Orders";
+    ViewData["PageTitle"] = "MyOrders";
+    ViewData["PageSubtitle"] = "Track and manage all your paper trades";
+var orders = Model.ToList();
+
+var allCount = orders.Count;
+var openCount = orders.Count(o =>
+    o.Status.Equals("OPEN", StringComparison.OrdinalIgnoreCase));
+
+var executedCount = orders.Count(o =>
+    o.Status.Equals("EXECUTED", StringComparison.OrdinalIgnoreCase));
+
+var cancelledCount = orders.Count(o =>
+    o.Status.Equals("CANCELLED", StringComparison.OrdinalIgnoreCase));
+
+var rejectedCount = orders.Count(o =>
+    o.Status.Equals("REJECTED", StringComparison.OrdinalIgnoreCase));
+
+}
+
+@section Styles { <link rel="stylesheet"
+       href="~/css/pages/orders.css"
+       asp-append-version="true" />
+}
+
+<div class="orders-page">
+
+<!-- Status Tabs -->
+<div class="orders-tabs">
+
+    <button class="order-tab active"
+            data-status="ALL">
+
+        All Orders
+
+        <span class="tab-count">
+            @allCount
+        </span>
+
+    </button>
+
+
+    <button class="order-tab"
+            data-status="OPEN">
+
+        Open
+
+        <span class="tab-count">
+            @openCount
+        </span>
+
+    </button>
+
+
+    <button class="order-tab"
+            data-status="EXECUTED">
+
+        Executed
+
+        <span class="tab-count">
+            @executedCount
+        </span>
+
+    </button>
+
+
+    <button class="order-tab"
+            data-status="CANCELLED">
+
+        Cancelled
+
+        <span class="tab-count">
+            @cancelledCount
+        </span>
+
+    </button>
+
+
+    <button class="order-tab"
+            data-status="REJECTED">
+
+        Rejected
+
+        <span class="tab-count">
+            @rejectedCount
+        </span>
+
+    </button>
+
+</div>
+
+
+<!-- Orders Card -->
+<div class="orders-card">
+
+    @if (!orders.Any())
+    {
+        <div class="orders-empty">
+
+            <h3 class="orders-empty-title">
+                No orders yet
+            </h3>
+
+            <p class="orders-empty-text">
+                Your orders will appear here.
+            </p>
+
+        </div>
+    }
+    else
+    {
+        <div class="orders-table-wrapper">
+
+            <table class="orders-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Time</th>
+                        <th>Instrument</th>
+                        <th>Side</th>
+                        <th>Product</th>
+                        <th>Order Type</th>
+                        <th>Qty</th>
+                        <th>Order Price</th>
+                        <th>Executed Price</th>
+                        <th>Total Amount</th>
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @foreach (var order in orders)
+                    {
+                        var statusClass =
+                            order.Status.ToUpperInvariant() switch
+                            {
+                                "EXECUTED" => "status-executed",
+                                "OPEN" => "status-open",
+                                "CANCELLED" => "status-cancelled",
+                                "REJECTED" => "status-rejected",
+                                _ => "status-default"
+                            };
+
+
+                        var sideClass =
+                            order.Side.Equals(
+                                "BUY",
+                                StringComparison.OrdinalIgnoreCase)
+                                ? "side-buy"
+                                : "side-sell";
+
+
+                        <tr data-order-status="@order.Status.ToUpperInvariant()">
+
+                            <!-- Time -->
+                            <td>
+
+                              @if (order.ExecutedAt.HasValue)
+                                    {
+                                        <div class="order-date">
+                                            @(order.ExecutedAt.Value.ToLocalTime().ToString("dd MMM yyyy"))
+                                        </div>
+
+                                        <div class="order-time">
+                                            @(order.ExecutedAt.Value.ToLocalTime().ToString("HH:mm:ss"))
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="order-date">
+                                             -
+                                        </div>
+
+                                        <div class="order-time">
+                                             -
+                                        </div>
+                                    }
+                            </td>
+
+
+                            <!-- Instrument -->
+                            <td>
+
+                                <span class="instrument-symbol">
+                                    @order.Symbol
+                                </span>
+
+                                <span class="instrument-meta">
+                                    @order.Exchange · EQ
+                                </span>
+
+                            </td>
+
+
+                            <!-- Side -->
+                            <td>
+
+                                <span class="@sideClass">
+                                    @order.Side
+                                </span>
+
+                            </td>
+
+
+                            <!-- Product -->
+                            <td>
+                                @order.Product
+                            </td>
+
+
+                            <!-- Order Type -->
+                            <td>
+                                @order.OrderType
+                            </td>
+
+
+                            <!-- Quantity -->
+                            <td>
+                                @order.Quantity
+                            </td>
+
+
+                            <!-- Order Price -->
+                            <td>
+                                ₹@order.Price.ToString("N2")
+                            </td>
+
+
+                            <!-- Executed Price -->
+                            <td>
+
+                                @if (order.ExecutedPrice.HasValue)
+                                {
+                                    <span>
+                                        ₹@order.ExecutedPrice.Value.ToString("N2")
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span>—</span>
+                                }
+
+                            </td>
+
+
+                            <!-- Total -->
+                            <td>
+                                ₹@order.TotalAmount.ToString("N2")
+                            </td>
+
+
+                            <!-- Status -->
+                            <td>
+
+                                @if (order.Status.Equals("OPEN", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <button type="button"
+                                        class="status-badge @statusClass order-cancel-trigger"
+                                        data-order-id="@order.Id"
+                                        title="Click to cancel this order">
+                                        @order.Status
+                                    </button>
+                                }
+                                else
+                                {
+                                    <span class="status-badge @statusClass">
+                                        @order.Status
+                                    </span>
+                                }
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+
+</div>
+
+
+</div>
+
+@section Scripts {
+
+
+<script src="~/js/pages/orders.js"
+        asp-append-version="true"></script>
+
+
+}

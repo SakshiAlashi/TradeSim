@@ -27,7 +27,8 @@
 
     const stockPage = document.querySelector(".stock-page");
     const stockSymbol = stockPage.dataset.symbol;
-        
+    const tradableInstrumentId = parseInt(stockPage.dataset.tradableInstrumentId);
+
     const qtyMinus = document.getElementById("qtyMinus");
     const qtyPlus = document.getElementById("qtyPlus");
     const qtyInput = document.getElementById("qtyInput");
@@ -94,10 +95,36 @@
     // ==========================================================
 
     let selectedSide = "buy";
+    function resetOrderDrawer() {
 
+        // Quantity
+        qtyInput.value = 1;
+
+        // Price
+        priceInput.value = currentMarketPrice.toFixed(2);
+
+        // CMP
+        cmpCheckbox.checked = true;
+        priceInput.disabled = true;
+
+        // Product
+        setProduct("delivery");
+
+        // Order variety
+        setOrderType("regular");
+
+        // Validity
+        document.getElementById("dayValidity").checked = true;
+        document.getElementById("iocValidity").checked = false;
+
+        // Recalculate estimated value
+        updateEstimatedOrderValue();
+    }
     function setOrderSide(side) {
 
         selectedSide = side;
+
+        resetOrderDrawer();
 
         // Change drawer visual mode
         const drawer = document.querySelector(".order-drawer");
@@ -435,6 +462,10 @@
         let triggerPrice = null;
         let limitPrice = null;
 
+        if (selectedOrderType === "regular" && !cmpCheckbox.checked) {
+            limitPrice = price;
+        }
+
         const variantInputs =
             orderVariantFields.querySelectorAll(".price-input");
 
@@ -463,7 +494,7 @@
         }
 
         const request = {
-            tradableInstrumentId: 1,
+            tradableInstrumentId: tradableInstrumentId,
             side: selectedSide.toUpperCase(),
             product: selectedProduct.toUpperCase(),
             quantity: quantity,
@@ -501,7 +532,7 @@
                     `Order placed successfully!\nOrder ID: ${result.orderId}`
                 );
 
-                overlay.classList.remove("open");
+                window.location.href = "/Order/MyOrders";
 
             } else {
 

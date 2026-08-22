@@ -1,0 +1,289 @@
+﻿/* ==========================================================
+ORDERS PAGE
+========================================================== */
+
+.orders-page {
+    padding: 30px 28px 28px;
+    min-height: calc(100vh - 82px);
+    background: #f8fafc;
+}
+
+.orders-header {
+    margin-bottom: 24px;
+}
+
+.orders-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.orders-subtitle {
+    margin: 6px 0 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+/* ==========================================================
+STATUS TABS
+========================================================== */
+
+.orders-tabs {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 16px;
+}
+
+.order-tab {
+    position: relative;
+    border: none;
+    background: transparent;
+    padding: 13px 2px 14px;
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+    .order-tab:hover {
+        color: #2563eb;
+    }
+
+    .order-tab.active {
+        color: #2563eb;
+    }
+
+        .order-tab.active::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -1px;
+            height: 2px;
+            background: #2563eb;
+        }
+
+.tab-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    margin-left: 5px;
+    padding: 0 6px;
+    border-radius: 11px;
+    background: #f1f5f9;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.order-tab.active .tab-count {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+/* ==========================================================
+TABLE CARD
+========================================================== */
+
+.orders-card {
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.orders-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.orders-table {
+    width: 100%;
+    min-width: 1050px;
+    border-collapse: collapse;
+}
+
+    .orders-table thead {
+        background: #fbfdff;
+    }
+
+    .orders-table th {
+        padding: 16px 18px;
+        border-bottom: 1px solid #e2e8f0;
+        color: #475569;
+        font-size: 12px;
+        font-weight: 700;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .orders-table td {
+        padding: 16px 18px;
+        border-bottom: 1px solid #eef2f7;
+        color: #0f172a;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .orders-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .orders-table tbody tr:hover {
+        background: #fafcff;
+    }
+
+/* ==========================================================
+TIME
+========================================================== */
+
+.order-date {
+    color: #64748b;
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.order-time {
+    color: #0f172a;
+    font-weight: 600;
+}
+
+/* ==========================================================
+INSTRUMENT
+========================================================== */
+
+.instrument-symbol {
+    display: block;
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.instrument-meta {
+    display: block;
+    margin-top: 4px;
+    color: #64748b;
+    font-size: 11px;
+}
+
+/* ==========================================================
+BUY / SELL
+========================================================== */
+
+.side-buy {
+    color: #16a34a;
+    font-weight: 700;
+}
+
+.side-sell {
+    color: #dc2626;
+    font-weight: 700;
+}
+
+/* ==========================================================
+STATUS
+========================================================== */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-executed {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status-open {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.status-cancelled {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.status-rejected {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.status-default {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+/* ==========================================================
+ACTION
+========================================================== */
+
+.order-details-btn {
+    padding: 7px 14px;
+    border: 1px solid #93c5fd;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+    .order-details-btn:hover {
+        background: #eff6ff;
+    }
+
+/* ==========================================================
+EMPTY STATE
+========================================================== */
+
+.orders-empty {
+    padding: 70px 20px;
+    text-align: center;
+}
+
+.orders-empty-title {
+    margin: 0 0 6px;
+    color: #0f172a;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.orders-empty-text {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+/* ==========================================================
+RESPONSIVE
+========================================================== */
+
+@media (max-width: 900px) {
+
+    ```
+    .orders-page {
+        padding: 22px 16px;
+    }
+
+    .orders-tabs {
+        gap: 18px;
+        overflow-x: auto;
+    }
+
+    .order-tab {
+        flex-shrink: 0;
+    }
+
+    ```
+}

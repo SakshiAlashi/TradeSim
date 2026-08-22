@@ -40,13 +40,19 @@
         // DAY / IOC
         public string Validity { get; set; } = string.Empty;
 
-        // COMPLETED / REJECTED
+        // OPEN / EXECUTED / CANCELLED / REJECTED
         public string Status { get; set; } = string.Empty;
 
         // Actual simulated execution price
         public decimal? ExecutedPrice { get; set; }
 
         public DateTime? ExecutedAt { get; set; }
+
+        // When the user cancelled the order
+        public DateTime? CancelledAt { get; set; }
+
+        // Why the order was rejected
+        public string? RejectionReason { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
@@ -56,3 +62,4 @@
         public TradableInstrument TradableInstrument { get; set; } = null!;
     }
 }
+

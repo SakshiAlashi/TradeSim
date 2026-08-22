@@ -36,6 +36,7 @@
     <link rel="stylesheet" href="~/css/layout/sidebar.css" asp-append-version="true" />
 
     <link rel="stylesheet" href="~/css/pages/dashboard.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
 
@@ -78,24 +79,34 @@
 
                 </a>
 
-                <a href="#">
+                <a asp-controller="Portfolio"
+                   asp-action="Index"
+                   data-title="Portfolio">
+
                     <i class="bi bi-wallet2"></i>
+
                     <span>Portfolio</span>
+
                 </a>
 
-                <a href="#">
+                <a asp-controller="Order"
+                   asp-action="MyOrders"
+                   data-title="Orders">
+
                     <i class="bi bi-receipt"></i>
+
                     <span>Orders</span>
+
                 </a>
 
-                <a href="#">
-                    <i class="bi bi-bookmark-star"></i>
-                    <span>Watchlist</span>
-                </a>
+                <a asp-controller="Leaderboard"
+                   asp-action="Index"
+                   data-title="Leaderboard">
 
-                <a href="#">
                     <i class="bi bi-trophy"></i>
+
                     <span>Leaderboard</span>
+
                 </a>
 
             </nav>
