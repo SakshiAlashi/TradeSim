@@ -106,8 +106,7 @@ namespace TradeSim.Services.Market
                 };
         }
 
-        public void UpdatePrice(
-            int tradableInstrumentId)
+        public void UpdatePrice(int tradableInstrumentId)
         {
             // --------------------------------------------------
             // Get market state
@@ -129,13 +128,39 @@ namespace TradeSim.Services.Market
             }
 
             // --------------------------------------------------
-            // Temporary price movement
+            // Calculate small per-tick price movement
+            //
+            // VolatilityPercent represents DAILY volatility.
+            // We therefore use only a small fraction of it
+            // for each simulator update.
             // --------------------------------------------------
 
+            decimal dailyVolatility =
+                Math.Abs(config.VolatilityPercent);
+
+            // Approximate number of active market seconds
+            // represented by one trading session.
+            const decimal tradingSecondsPerDay =
+                23400m;
+
+            decimal perTickVolatility =
+                dailyVolatility /
+                (decimal)Math.Sqrt(
+                    (double)tradingSecondsPerDay);
+
+            // Random shock between -1 and +1
+            decimal randomShock =
+                (decimal)(Random.Shared.NextDouble() * 2 - 1);
+
+            // Calculate movement based on current price
             decimal movement =
-                (decimal)(
-                    Random.Shared.NextDouble() - 0.5
-                ) * 10m;
+                state.CurrentPrice *
+                (perTickVolatility / 100m) *
+                randomShock;
+
+            // --------------------------------------------------
+            // Calculate new price
+            // --------------------------------------------------
 
             decimal newPrice =
                 state.CurrentPrice + movement;
@@ -145,10 +170,16 @@ namespace TradeSim.Services.Market
             // --------------------------------------------------
 
             if (newPrice > state.UpperCircuit)
-                newPrice = state.UpperCircuit;
+            {
+                newPrice =
+                    state.UpperCircuit;
+            }
 
             if (newPrice < state.LowerCircuit)
-                newPrice = state.LowerCircuit;
+            {
+                newPrice =
+                    state.LowerCircuit;
+            }
 
             // --------------------------------------------------
             // Respect tick size
@@ -159,7 +190,25 @@ namespace TradeSim.Services.Market
                 newPrice =
                     Math.Round(
                         newPrice / config.TickSize,
-                        0) * config.TickSize;
+                        0,
+                        MidpointRounding.AwayFromZero)
+                    * config.TickSize;
+            }
+
+            // --------------------------------------------------
+            // Final safety check after tick rounding
+            // --------------------------------------------------
+
+            if (newPrice > state.UpperCircuit)
+            {
+                newPrice =
+                    state.UpperCircuit;
+            }
+
+            if (newPrice < state.LowerCircuit)
+            {
+                newPrice =
+                    state.LowerCircuit;
             }
 
             // --------------------------------------------------
