@@ -405,5 +405,11 @@ namespace TradeSim.Services
 
             return marketEngine.GetState(instrument.Id).CurrentPrice;
         }
+        public List<SimulatedMarketCandle> GetMarketCandles(int tradableInstrumentId)
+
+        {
+            return marketEngine.GetCandles(tradableInstrumentId);
+
+        }
     }
 }

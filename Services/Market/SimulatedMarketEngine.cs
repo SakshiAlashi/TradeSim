@@ -5,8 +5,8 @@ namespace TradeSim.Services.Market
     public class SimulatedMarketEngine
     {
         private readonly Dictionary<int, SimulatedMarketState> marketStates = new();
-
         private readonly Dictionary<int, SimulatedMarketConfig> marketConfigs = new();
+        private readonly Dictionary<int, List<SimulatedMarketCandle>> marketCandles = new();
 
         public SimulatedMarketState GetState(int tradableInstrumentId)
         {
@@ -24,6 +24,117 @@ namespace TradeSim.Services.Market
         public bool HasState(int tradableInstrumentId)
         {
             return marketStates.ContainsKey(tradableInstrumentId);
+        }
+
+        public List<SimulatedMarketCandle> GetCandles(int tradableInstrumentId)
+        {
+            if (!marketCandles.TryGetValue(
+                    tradableInstrumentId,
+                    out var candles))
+            {
+                return new List<SimulatedMarketCandle>();
+            }
+
+            return candles;
+        }
+
+        private void UpdateCandle(
+    int tradableInstrumentId,
+    SimulatedMarketState state)
+        {
+            // --------------------------------------------------
+            // Get or create candle collection
+            // --------------------------------------------------
+
+            if (!marketCandles.TryGetValue(
+                    tradableInstrumentId,
+                    out var candles))
+            {
+                candles = new List<SimulatedMarketCandle>();
+
+                marketCandles[tradableInstrumentId] = candles;
+            }
+
+            // --------------------------------------------------
+            // Current candle time
+            // --------------------------------------------------
+
+            DateTime candleTime =
+                new DateTime(
+                    state.LastUpdated.Year,
+                    state.LastUpdated.Month,
+                    state.LastUpdated.Day,
+                    state.LastUpdated.Hour,
+                    state.LastUpdated.Minute,
+                    0,
+                    DateTimeKind.Utc);
+
+            // --------------------------------------------------
+            // Get current candle
+            // --------------------------------------------------
+
+            var currentCandle =
+                candles.LastOrDefault();
+
+            // --------------------------------------------------
+            // Create first candle
+            // --------------------------------------------------
+
+            if (currentCandle == null ||
+                currentCandle.Time != candleTime)
+            {
+                var newCandle =
+                    new SimulatedMarketCandle
+                    {
+                        TradableInstrumentId =
+                            tradableInstrumentId,
+
+                        Symbol =
+                            state.Symbol,
+
+                        Time =
+                            candleTime,
+
+                        Open =
+                            state.CurrentPrice,
+
+                        High =
+                            state.CurrentPrice,
+
+                        Low =
+                            state.CurrentPrice,
+
+                        Close =
+                            state.CurrentPrice,
+
+                        Volume =
+                            state.Volume
+                    };
+
+                candles.Add(newCandle);
+
+                return;
+            }
+
+            // --------------------------------------------------
+            // Update current candle
+            // --------------------------------------------------
+
+            currentCandle.High =
+                Math.Max(
+                    currentCandle.High,
+                    state.CurrentPrice);
+
+            currentCandle.Low =
+                Math.Min(
+                    currentCandle.Low,
+                    state.CurrentPrice);
+
+            currentCandle.Close =
+                state.CurrentPrice;
+
+            currentCandle.Volume =
+                state.Volume;
         }
 
         public void InitializeInstrument(
@@ -281,6 +392,14 @@ namespace TradeSim.Services.Market
 
             state.LastUpdated =
                 DateTime.UtcNow;
+
+            // --------------------------------------------------
+            // Update current OHLC candle
+            // --------------------------------------------------
+
+            UpdateCandle(
+                tradableInstrumentId,
+                state);
         }
     }
 }
